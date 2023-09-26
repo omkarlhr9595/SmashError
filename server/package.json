@@ -4,25 +4,26 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+  "engines": {
+    "node": "14.x",
+    "npm": "6.14.3"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "author": "omkar",
   "license": "ISC",
   "dependencies": {
-    "@apollo/server": "^4.9.3",
-    "@types/bcrypt": "^5.0.0",
-    "bcrypt": "^5.1.1",
-    "dotenv": "^16.3.1",
-    "graphql": "^16.8.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.2"
+    "apollo-server": "^2.18.2",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.4.0",
+    "graphql-iso-date": "^3.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.11",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
-    "@types/node": "^20.6.3",
-    "typescript": "^5.2.2"
+    "eslint": "^7.12.1"
   }
 }
