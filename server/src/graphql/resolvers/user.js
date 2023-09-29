@@ -4,6 +4,7 @@ import { registerValidator,loginValidator } from "../../utils/validators.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../../utils/config.js";
+import { Question } from "../../models/question.js";
 export const userResolver = {
   Query: {
     getUser: async (_, args) => {
