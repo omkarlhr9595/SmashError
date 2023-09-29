@@ -7,7 +7,6 @@ export const authChecker = (context) => {
   if (!token) {
     throw new AuthenticationError("No auth token found. Authorization denied.");
   }
-
   try {
     const decodedUser = jwt.verify(token, SECRET);
     return decodedUser;
