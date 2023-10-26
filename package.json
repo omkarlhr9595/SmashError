@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/omkarlhr9595/SmashError/issues"
   },
-  "homepage": "https://github.com/omkarlhr9595/SmashError#readme"
+  "homepage": "https://github.com/omkarlhr9595/SmashError#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
 }

@@ -56,6 +56,7 @@ export const typeDefs = gql`
     author: Author!
     title: String!
     body: String!
+    aiAnswer: String!
     tags: [String!]!
     acceptedAnswer: ID
     comments: [Comment]!
@@ -69,11 +70,13 @@ export const typeDefs = gql`
   type Query {
     getUser(username: String!): User!
     getAllUsers: [UserList]!
+    getAllQuestions: [Question]!
   }
   type Mutation {
     register(username: String!, password: String!): LoggedUser!
     login(username: String!, password: String!): LoggedUser!
     getUser(username: String!): User!
     postQuestion(title: String!, body: String!, tags: [String!]!): Question!
+    getQuestion(id: ID!): Question!
   }
 `;

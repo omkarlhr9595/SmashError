@@ -42,6 +42,9 @@ export const questionSchema = new mongoose.Schema({
   ],
   views: { type: Number, default: 0 },
   hotAlgo: { type: Number, default: Date.now },
+  aiAnswer: {
+    type: String,
+  },
   acceptedAnswer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Answer",

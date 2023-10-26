@@ -3,6 +3,7 @@ import { questionResolver } from "./question.js";
 export const resolvers = {
   Query: {
     ...userResolver.Query,
+    ...questionResolver.Query,
   },
   Mutation: {
     ...userResolver.Mutation,
