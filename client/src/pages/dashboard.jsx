@@ -6,6 +6,7 @@ import { Button, Typography, TextField, Avatar, Divider } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import { useEffect } from "react";
 import { formatDateAgo } from "../utils/time.js";
+import mongoose from "mongoose";
 const getAllQuestionsQuery = gql`
   query {
     getAllQuestions {
@@ -14,6 +15,7 @@ const getAllQuestionsQuery = gql`
         id
       }
       title
+      body
       tags
       answers {
         body
@@ -29,11 +31,11 @@ const getAllQuestionsQuery = gql`
 const Dashboard = () => {
   const { loading, error, data } = useQuery(getAllQuestionsQuery);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data.getAllQuestions);
-    }
-  });
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data.getAllQuestions);
+  //   }
+  // });
 
   const dispatch = useDispatch();
   const username = useSelector((state) => state.user.data.username);
@@ -57,7 +59,7 @@ const Dashboard = () => {
           </Typography>
           {data &&
             data.getAllQuestions.map((question) => {
-              return <QuestionCard question={question} />;
+              return <QuestionCard key={question.id} question={question} />;
             })}
         </div>
       </div>
@@ -86,7 +88,19 @@ const UserCard = ({ username, uid }) => {
   );
 };
 
+const GET_USERNAME_QUERY = gql`
+  query getUsername($id: ID!) {
+    getUsername(id: $id)
+  }
+`;
+
 const QuestionCard = ({ question }) => {
+  let id = question.author.id;
+
+  const { loading, error, data } = useQuery(GET_USERNAME_QUERY, {
+    variables: { id },
+  });
+
   return (
     <>
       <div
@@ -117,7 +131,10 @@ const QuestionCard = ({ question }) => {
           >
             {question.title}
           </Typography>
-          <div className="flex flex-wrap justify-start items-start">
+          <Typography variant="body1" className="text-gray-500 mt-3">
+            {question.body}
+          </Typography>
+          <div className="flex mt-3 flex-wrap justify-start items-start">
             {question.tags.map((tag, ind) => {
               return (
                 <p
@@ -141,8 +158,12 @@ const QuestionCard = ({ question }) => {
               <Typography variant="caption" className="ml-2">
                 asked {formatDateAgo(question.createdAt)}
               </Typography>
-              <Typography variant="caption" className="ml-2 text-purple-600">
-                OMKARLOHAR
+              <Typography
+                component={RouterLink}
+                variant="caption"
+                className="ml-2 text-purple-600"
+              >
+                {data && data.getUsername}
               </Typography>
             </div>
           </div>

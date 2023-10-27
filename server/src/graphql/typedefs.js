@@ -71,6 +71,7 @@ export const typeDefs = gql`
     getUser(username: String!): User!
     getAllUsers: [UserList]!
     getAllQuestions: [Question]!
+    getUsername(id: ID!): String!
   }
   type Mutation {
     register(username: String!, password: String!): LoggedUser!

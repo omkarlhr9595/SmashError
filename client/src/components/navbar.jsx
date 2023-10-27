@@ -27,7 +27,10 @@ export const Navbar = () => {
             Ask Question
           </Button>
           <Button
-            onClick={() => dispatch(setLogout())}
+            onClick={() => {
+              dispatch(setLogout());
+              navigate("/auth");
+            }}
             className="bg-red-500 hover:bg-red-700 text-white  py-2 px-4 rounded"
           >
             LOGOUT

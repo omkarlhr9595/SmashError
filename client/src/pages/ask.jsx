@@ -16,17 +16,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const POST_QUESTION = gql`
-  mutation PostQuestion(
-    $questionTitle: String!
-    $questionBody: String!
-    $questionTags: [String!]
-  ) {
-    postQuestion(
-      title: $questionTitle
-      body: $questionBody
-      tags: $questionTags
-    ) {
+const POST_QUESTION_MUTATION = gql`
+  mutation postQuestion($title: String!, $body: String!, $tags: [String!]!) {
+    postQuestion(title: $title, body: $body, tags: $tags) {
       id
     }
   }
@@ -41,36 +33,32 @@ export const Ask = () => {
     resolver: zodResolver(askQuestionSchema),
   });
 
-  const [postQuestion, { loading }] = useMutation(POST_QUESTION);
   const [tags, setTags] = useState(["error", "smash"]);
   const navigate = useNavigate();
   const authToken = useSelector((state) => state.user.token);
 
-  const onSubmit = async (form) => {
-    console.log("Title:", form.title);
-    console.log("Body:", form.body);
-    // console.log("Tags:", tags);
-    console.log(authToken);
-    try {
-      const response = await postQuestion({
-        variables: {
-          questionTitle: form.title.toString(),
-          questionBody: form.body.toString(),
-          questionTags: ["error", "smash"],
-        },
-        context: {
-          headers: {
-            Authorization: authToken,
-          },
-        },
-      });
+  const [postQuestionMutation, { loading, error, data }] = useMutation(
+    POST_QUESTION_MUTATION,
+  );
 
-      if (response.data && response.data.postQuestion) {
-        navigate(`/question/${response.data.postQuestion.id}`);
-      }
-    } catch (error) {
-      console.error("Error posting the question:", error.message);
-      // Handle errors (e.g., display an error message)
+  const onSubmit = async (form) => {
+    const response = await postQuestionMutation({
+      variables: {
+        title: form.title,
+        body: form.body,
+        tags: ["smash", "error"],
+      },
+      context: {
+        headers: {
+          authorization: authToken,
+        },
+      },
+    });
+    if (response.data) {
+      console.log(response.data);
+      navigate(`/question/${response.data.postQuestion.id}`);
+    } else if (error) {
+      // The mutation failed
     }
   };
 

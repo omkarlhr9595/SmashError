@@ -2,9 +2,11 @@ import { Divider, Typography, Button, Checkbox, SvgIcon } from "@mui/material";
 import { formatDateAgo } from "../utils/time";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { solarizedlight } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+
 export const QuestionCard = ({ data }) => {
   return (
     <div className="mt-5 h-min w-1/2 ">
@@ -39,9 +41,9 @@ export const QuestionCard = ({ data }) => {
             })}
           </div>
           <div className="mt-5">
-            <Button variant="contained" className="bg-yellow-500">
+            {/* <Button variant="contained" className="bg-yellow-500">
               Edit
-            </Button>
+            </Button> */}
             <Button variant="contained" className="bg-red-600 ml-3">
               DELETE
             </Button>
@@ -49,11 +51,11 @@ export const QuestionCard = ({ data }) => {
         </div>
       </div>
       <div className="">
-        <Typography variant="h6" className="mt-4">
+        <Typography variant="h6" className="mt-4 text-blue-700 font-bold">
           AI ANSWER
         </Typography>
-        <ReactMarkdown>{data.aiAnswer}</ReactMarkdown>
-        {/* <SyntaxHighlighter language="javascript" style={solarizedlight}>
+        <Markdown className="font-sans text-xl" rehypePlugins={[rehypeHighlight]}>{data.aiAnswer}</Markdown>
+        {/* <SyntaxHighlighter language="dart" style={solarizedlight}>
           {data.aiAnswer}
         </SyntaxHighlighter> */}
       </div>

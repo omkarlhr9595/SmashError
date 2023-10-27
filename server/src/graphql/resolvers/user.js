@@ -7,6 +7,16 @@ import { SECRET } from "../../utils/config.js";
 import { Question } from "../../models/question.js";
 export const userResolver = {
   Query: {
+    getUsername: async (_, args,context) => {
+      const { id } = args;
+      const user = await User.findById(id);
+
+      if (!user) {
+        throw new UserInputError(`User with id '${id}' does not exist.`);
+      }
+
+      return user.username;
+    },
     getUser: async (_, args) => {
       const { username } = args;
 

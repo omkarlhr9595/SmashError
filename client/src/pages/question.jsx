@@ -57,12 +57,12 @@ export const Question = () => {
     <>
       <Navbar />
       {loading ? (
-        <div className="h-[80vh] w-full grid place-items-center">
+        <div className="h-[85%] w-full grid place-items-center">
           <CircularProgress size={100} />
         </div>
       ) : null}
       {data ? (
-        <div className="w-full h-screen flex items-start justify-center">
+        <div className="w-full h-[85%] flex items-start justify-center">
           <QuestionCard data={data} />
         </div>
       ) : null}
