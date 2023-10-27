@@ -2,6 +2,9 @@ import { Divider, Typography, Button, Checkbox, SvgIcon } from "@mui/material";
 import { formatDateAgo } from "../utils/time";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import ReactMarkdown from "react-markdown";
 export const QuestionCard = ({ data }) => {
   return (
     <div className="mt-5 h-min w-1/2 ">
@@ -25,6 +28,7 @@ export const QuestionCard = ({ data }) => {
             {data.tags.map((tag, ind) => {
               return (
                 <p
+                  key={tag + ind}
                   className={` ${
                     ind > 0 ? "ml-2" : ""
                   } mt-3 font-sans bg-purple-100 text-purple-700 border-solid border border-purple-700 w-min px-3 py-1 rounded-3xl`}
@@ -43,6 +47,15 @@ export const QuestionCard = ({ data }) => {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="">
+        <Typography variant="h6" className="mt-4">
+          AI ANSWER
+        </Typography>
+        <ReactMarkdown>{data.aiAnswer}</ReactMarkdown>
+        {/* <SyntaxHighlighter language="javascript" style={solarizedlight}>
+          {data.aiAnswer}
+        </SyntaxHighlighter> */}
       </div>
       <Divider className="my-5" />
     </div>

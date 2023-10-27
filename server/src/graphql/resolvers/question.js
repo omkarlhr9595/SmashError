@@ -96,6 +96,7 @@ export const questionResolver = {
           acceptedAnswer: question.acceptedAnswer
             ? question.acceptedAnswer
             : null,
+            aiAnswer:question.aiAnswer,
           comments: question.comments,
           answers: question.answers,
           upvotedBy: question.upvotedBy,

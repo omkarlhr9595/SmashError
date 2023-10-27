@@ -17,6 +17,7 @@ const GET_QUESTION = gql`
       body
       acceptedAnswer
       tags
+      aiAnswer
       upvotedBy
       downvotedBy
       updatedAt
