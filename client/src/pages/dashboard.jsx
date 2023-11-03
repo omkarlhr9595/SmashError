@@ -1,12 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
-import { setLogout } from "../state/user_state";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/navbar";
-import { Button, Typography, TextField, Avatar, Divider } from "@mui/material";
+import { Typography, TextField, Avatar, Divider } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
-import { useEffect } from "react";
 import { formatDateAgo } from "../utils/time.js";
-import mongoose from "mongoose";
+import { da } from "date-fns/locale";
+
 const getAllQuestionsQuery = gql`
   query {
     getAllQuestions {
@@ -67,7 +66,7 @@ const Dashboard = () => {
   );
 };
 
-const UserCard = ({ username, uid }) => {
+export const UserCard = ({ username, uid }) => {
   return (
     <div className="rounded-lg border-2 border-solid border-bgblack overflow-hidden       w-[80%] mt-[10%] flex">
       <div className="h-1/3 aspect-square w-full p-0 bg-bgblack grid place-items-center">
@@ -100,6 +99,8 @@ const QuestionCard = ({ question }) => {
   const { loading, error, data } = useQuery(GET_USERNAME_QUERY, {
     variables: { id },
   });
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -148,23 +149,29 @@ const QuestionCard = ({ question }) => {
               );
             })}
           </div>
-          <div className="flex justify-end h-16 self-end">
-            <img
-              src={`https://secure.gravatar.com/avatar/${question.author.id}?s=164&d=identicon`}
-              alt=""
-              className="h-10 w-10 place-self-end"
-            />
-            <div className="flex flex-col justify-end">
-              <Typography variant="caption" className="ml-2">
-                asked {formatDateAgo(question.createdAt)}
-              </Typography>
-              <Typography
-                component={RouterLink}
-                variant="caption"
-                className="ml-2 text-purple-600"
-              >
-                {data && data.getUsername}
-              </Typography>
+          <div className="flex w-1/2 justify-end h-16 self-end">
+            <div className="w-1/2"></div>
+            <div className="flex w-1/2">
+              <img
+                src={`https://secure.gravatar.com/avatar/${question.author.id}?s=164&d=identicon`}
+                alt=""
+                className="h-10 w-10 place-self-end"
+              />
+              <div className="flex flex-col justify-end">
+                <Typography variant="caption" className="ml-2">
+                  asked {formatDateAgo(question.createdAt)}
+                </Typography>
+                {data && (
+                  <Typography
+                    component={RouterLink}
+                    to={`/user/${data.getUsername}`}
+                    variant="caption"
+                    className="ml-2 text-purple-600"
+                  >
+                    {data.getUsername}
+                  </Typography>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Home from "./pages/home";
+import User from "./pages/user";
 import AuthPage from "./pages/auth";
 import Dashboard from "./pages/dashboard";
 import { Ask } from "./pages/ask";
@@ -27,7 +27,8 @@ const App = () => {
           />
 
           <Route path="question/:id" element={<Question />} />
-          <Route path="*" element={<Navigate to="/" replace={true} />} />
+          <Route path="user/:username" element={<User />} />
+          {/* <Route path="*" element={<Navigate to="/" replace={true} />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

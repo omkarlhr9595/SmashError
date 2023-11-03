@@ -35,6 +35,32 @@ export const questionResolver = {
         console.log(error.message);
       }
     },
+    getQuestion: async (_, args, context) => {
+      const { id } = args;
+      try {
+        const question = await Question.findById(id);
+        const user = await User.findById(question.author);
+        return {
+          id: question.id,
+          author: { id: user.id, username: user.username },
+          title: question.title,
+          body: question.body,
+          tags: question.tags,
+          acceptedAnswer: question.acceptedAnswer
+            ? question.acceptedAnswer
+            : null,
+          aiAnswer: question.aiAnswer,
+          comments: question.comments,
+          answers: question.answers,
+          upvotedBy: question.upvotedBy,
+          downvotedBy: question.downvotedBy,
+          createdAt: question.createdAt,
+          updatedAt: question.updatedAt,
+        };
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
   },
   Mutation: {
     postQuestion: async (_, args, context) => {
@@ -96,7 +122,7 @@ export const questionResolver = {
           acceptedAnswer: question.acceptedAnswer
             ? question.acceptedAnswer
             : null,
-            aiAnswer:question.aiAnswer,
+          aiAnswer: question.aiAnswer,
           comments: question.comments,
           answers: question.answers,
           upvotedBy: question.upvotedBy,

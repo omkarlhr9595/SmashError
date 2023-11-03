@@ -4,8 +4,6 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import Markdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { solarizedlight } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 export const QuestionCard = ({ data }) => {
   return (
