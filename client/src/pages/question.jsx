@@ -15,18 +15,13 @@ const GET_QUESTION = gql`
       }
       title
       body
-      acceptedAnswer
       tags
       aiAnswer
-      upvotedBy
-      downvotedBy
       updatedAt
       createdAt
-      comments {
-        id
-      }
       answers {
         id
+        body
       }
     }
   }

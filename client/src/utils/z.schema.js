@@ -38,5 +38,12 @@ export const askQuestionSchema = z.object({
     .min(30, { message: "Enter atleast 30 characters" })
     .max(500, { message: "Body is too long" }),
 
-  // tags: z.array(z.string()).min(1, { message: "Select atleast one tag" }),
+  tags: z.string().min(3, { message: "Enter atleast 1 tag" }),
+});
+
+export const answerSchema = z.object({
+  body: z
+    .string()
+    .min(30, { message: "Enter atleast 10 characters" })
+    .max(500, { message: "Body is too long" }),
 });

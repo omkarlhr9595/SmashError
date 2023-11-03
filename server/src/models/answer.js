@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { commentSchema } from "./comment.js";
 import { schemaCleaner } from "../utils/schemaCleaner.js";
 
 export const answerSchema = new mongoose.Schema({
@@ -14,24 +13,7 @@ export const answerSchema = new mongoose.Schema({
     trim: true,
     minlength: 30,
   },
-  comments: [commentSchema],
-  upvotedBy: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  downvotedBy: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
   createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
     type: Date,
     default: Date.now,
   },

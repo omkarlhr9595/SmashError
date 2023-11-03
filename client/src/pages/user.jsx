@@ -108,7 +108,7 @@ const QuestionCard = ({ id }) => {
           className="flex mt-5 items-start justify-start h-[150px]  "
           key={question.id}
         >
-          <div className="px-10 h-full text-center flex flex-col justify-start  items-center">
+          <div className="px-10 h-full text-center flex flex-col justify-start items-center">
             <Typography variant="h6" className="text-gray-900 mt-10">
               {question.answers.length}
             </Typography>

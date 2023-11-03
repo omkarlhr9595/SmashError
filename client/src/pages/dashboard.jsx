@@ -18,10 +18,7 @@ const getAllQuestionsQuery = gql`
       tags
       answers {
         body
-      }
-      acceptedAnswer
-      upvotedBy
-      downvotedBy
+      } 
       createdAt
       updatedAt
     }
@@ -108,7 +105,15 @@ const QuestionCard = ({ question }) => {
         className="flex mt-5 items-start justify-start h-[150px]  "
         key={question.id}
       >
-        <div className="px-10 h-full text-center flex flex-col justify-evenly items-center">
+        <div className="px-10 h-full text-center flex flex-col justify-start items-center">
+          <Typography variant="h6" className="text-gray-900 mt-10">
+            {question.answers.length}
+          </Typography>
+          <Typography variant="body1" className="text-gray-500">
+            answers
+          </Typography>
+        </div>
+        {/* <div className="px-10 h-full text-center flex flex-col justify-center items-center">
           <Typography variant="h6" className="text-gray-900">
             {question.upvotedBy.length + question.downvotedBy.length}
           </Typography>
@@ -121,7 +126,7 @@ const QuestionCard = ({ question }) => {
           <Typography variant="body1" className="text-gray-500">
             answers
           </Typography>
-        </div>
+        </div> */}
         <div className="h-full flex flex-col items-start justify-between w-4/5 ">
           <Typography
             component={RouterLink}

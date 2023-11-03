@@ -33,7 +33,6 @@ export const Ask = () => {
     resolver: zodResolver(askQuestionSchema),
   });
 
-  const [tags, setTags] = useState(["error", "smash"]);
   const navigate = useNavigate();
   const authToken = useSelector((state) => state.user.token);
 
@@ -42,11 +41,12 @@ export const Ask = () => {
   );
 
   const onSubmit = async (form) => {
+    const tags = form.tags.split(",");
     const response = await postQuestionMutation({
       variables: {
         title: form.title,
         body: form.body,
-        tags: ["smash", "error"],
+        tags: tags,
       },
       context: {
         headers: {
@@ -108,21 +108,17 @@ export const Ask = () => {
                 )}
               />
               <div className="mt-5"></div>
-              <Autocomplete
-                style={{ margin: "10px 0" }}
-                multiple
-                id="tags-outlined"
-                options={tags}
-                defaultValue={[...tags]}
-                freeSolo
-                autoSelect
-                onChange={(e) => setTags([...tags, e.target.value])}
-                renderInput={(params) => (
+              <Controller
+                name="tags"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
                   <TextField
-                    {...params}
-                    label="Tags Feature is not yet implemented"
-                    placeholder="Tags Feature is not yet implemented"
-                    value={tags}
+                    {...field}
+                    label="Tags"
+                    className="w-full"
+                    error={!!errors.tags}
+                    helperText={errors.tags ? errors.tags.message : "Tags are separated by commas"}
                   />
                 )}
               />

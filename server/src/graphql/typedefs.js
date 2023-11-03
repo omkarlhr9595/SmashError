@@ -43,10 +43,6 @@ export const typeDefs = gql`
     id: ID!
     author: Author!
     body: String!
-    comments: [Comment]!
-    points: Int!
-    upvotedBy: [ID]!
-    downvotedBy: [ID]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -58,11 +54,7 @@ export const typeDefs = gql`
     body: String!
     aiAnswer: String!
     tags: [String!]!
-    acceptedAnswer: ID
-    comments: [Comment]!
     answers: [Answer]!
-    upvotedBy: [ID]!
-    downvotedBy: [ID]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -80,5 +72,7 @@ export const typeDefs = gql`
     getUser(username: String!): User!
     postQuestion(title: String!, body: String!, tags: [String!]!): Question!
     getQuestion(id: ID!): Question!
+    deleteQuestion(quesId: ID!): String!
+    postAnswer(quesId: ID!, body: String!): [Answer]!
   }
 `;

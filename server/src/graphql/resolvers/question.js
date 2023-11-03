@@ -19,14 +19,8 @@ export const questionResolver = {
           title: doc.title,
           body: doc.body,
           tags: doc.tags,
-          acceptedAnswer: doc.acceptedAnswer
-            ? doc.acceptedAnswer.toString()
-            : null,
-          comments: doc.comments,
           aiAnswer: doc.aiAnswer,
           answers: doc.answers,
-          upvotedBy: doc.upvotedBy,
-          downvotedBy: doc.downvotedBy,
           createdAt: doc.createdAt,
           updatedAt: doc.updatedAt,
         }));
@@ -39,6 +33,9 @@ export const questionResolver = {
       const { id } = args;
       try {
         const question = await Question.findById(id);
+        if(!question) {
+          throw new UserInputError("Question not found");
+        }
         const user = await User.findById(question.author);
         return {
           id: question.id,
@@ -46,14 +43,8 @@ export const questionResolver = {
           title: question.title,
           body: question.body,
           tags: question.tags,
-          acceptedAnswer: question.acceptedAnswer
-            ? question.acceptedAnswer
-            : null,
           aiAnswer: question.aiAnswer,
-          comments: question.comments,
           answers: question.answers,
-          upvotedBy: question.upvotedBy,
-          downvotedBy: question.downvotedBy,
           createdAt: question.createdAt,
           updatedAt: question.updatedAt,
         };
@@ -112,6 +103,9 @@ export const questionResolver = {
       const { id } = args;
       try {
         const question = await Question.findById(id);
+        if(!question) {
+          throw new UserInputError("Question not found");
+        }
         const user = await User.findById(question.author);
         return {
           id: question.id,
@@ -119,19 +113,31 @@ export const questionResolver = {
           title: question.title,
           body: question.body,
           tags: question.tags,
-          acceptedAnswer: question.acceptedAnswer
-            ? question.acceptedAnswer
-            : null,
           aiAnswer: question.aiAnswer,
-          comments: question.comments,
           answers: question.answers,
-          upvotedBy: question.upvotedBy,
-          downvotedBy: question.downvotedBy,
           createdAt: question.createdAt,
           updatedAt: question.updatedAt,
         };
       } catch (error) {
         console.log(error.message);
+      }
+    },
+    deleteQuestion: async (_, args, context) => {
+      const loggedUser = authChecker(context);
+      const { quesId } = args;
+      try {
+        const user = await User.findById(loggedUser.id);
+        const question = await Question.findById(quesId);
+        if (!question) {
+          throw new UserInputError("Question not found");
+        }
+        if (question.author.toString() !== loggedUser.id) {
+          throw new UserInputError("You are not the author of this question");
+        }
+        await Question.findByIdAndDelete(quesId);
+        return "Not implemented";
+      } catch (err) {
+        throw new UserInputError(errorHandler(err));
       }
     },
   },
