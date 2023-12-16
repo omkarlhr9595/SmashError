@@ -3,8 +3,11 @@ import {
   Typography,
   Button,
   Autocomplete,
+  Snackbar,
+  SnackbarContent,
   CircularProgress,
   Box,
+  IconButton,
 } from "@mui/material";
 import { Navbar } from "../components/navbar";
 import { askQuestionSchema } from "../utils/z.schema";
@@ -58,12 +61,48 @@ export const Ask = () => {
       console.log(response.data);
       navigate(`/question/${response.data.postQuestion.id}`);
     } else if (error) {
-      // The mutation failed
+      handleSnackbarOpen(error.message);
     }
+  };
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setErrorMessage(message);
+    setSnackbarOpen(true);
   };
 
   return (
     <div className="h-[85%]">
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <SnackbarContent
+          message={errorMessage}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              {/* Add close icon here */}
+            </IconButton>
+          }
+        />
+      </Snackbar>
       <Navbar />
       <div className="flex flex-col h-full items-center justify-start">
         <div className="w-1/2 h-full ">
@@ -118,7 +157,11 @@ export const Ask = () => {
                     label="Tags"
                     className="w-full"
                     error={!!errors.tags}
-                    helperText={errors.tags ? errors.tags.message : "Tags are separated by commas"}
+                    helperText={
+                      errors.tags
+                        ? errors.tags.message
+                        : "Tags are separated by commas"
+                    }
                   />
                 )}
               />
