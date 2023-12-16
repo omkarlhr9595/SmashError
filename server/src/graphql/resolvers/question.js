@@ -66,11 +66,26 @@ export const questionResolver = {
       try {
         const author = await User.findById(loggedUser.id);
         const res = await axios.post(PALM_URI, {
-          prompt: {
-            text: title + " " + body,
+          contents: [
+            {
+              parts: [{ text: title + " " + body }],
+            },
+          ],
+          safetySettings: [
+            {
+              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+              threshold: "BLOCK_ONLY_HIGH",
+            },
+          ],
+          generationConfig: {
+            stopSequences: ["Title"],
+            temperature: 1.0,
+            maxOutputTokens: 800,
+            topP: 0.8,
+            topK: 10,
           },
         });
-        const ans = res.data.candidates[0].output;
+        const ans = res.data.candidates[0].content.parts[0].text;
         const newQuestion = new Question({
           title,
           body,
