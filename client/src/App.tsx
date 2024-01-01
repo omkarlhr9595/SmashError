@@ -1,24 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { Toaster } from "@/components/ui/toaster";
-
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 function App() {
- const { toast } = useToast();
   return (
     <>
       <div className="h-screen w-full flex items-center justify-center">
-        <Button
-          variant="outline"
-          onClick={() => {
-            toast({
-              description: "Your message has been sent.",
-            });
-          }}
-        >
+        <Button variant="outline" onClick={() => {
+          toast("Event has been created.");
+        }}>
           Show Toast
         </Button>
       </div>
-      <Toaster/>
+      <Toaster />
     </>
   );
 }
