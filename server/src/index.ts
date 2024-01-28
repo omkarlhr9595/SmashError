@@ -1,23 +1,34 @@
-import { PrismaClient } from "@prisma/client";
+import { Server } from "http";
+import prisma from "./client";
+import app from "./app";
+import config from "./config/config";
 
-const prisma = new PrismaClient();
 
-async function main() {
-  const user = await prisma.user.create({
-    data: {
-      name: "Alice",
-      email: "alice@gmail.com",
-    },
+let server: Server;
+
+
+prisma.$connect().then(() => {
+  server = app.listen(config.port, () => {
+    console.log(`🟢 Server is running on http://localhost:${config.port}`);
   });
+});
 
-  console.log(user);
-  
-}
+const exitHandler = () => {
+  if (server) {
+    console.log("🔴 Server is stopping");
+    server.close();
+  }
+  prisma.$disconnect();
+};
 
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+const unexpectedErrorHandler = (error: unknown) => {
+  exitHandler();
+};
+
+process.on("uncaughtException", unexpectedErrorHandler);
+process.on("unhandledRejection", unexpectedErrorHandler);
+
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received");
+  if (server) server.close();
+});
