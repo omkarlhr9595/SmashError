@@ -1,18 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
+import { Navigate, Routes, Route, BrowserRouter } from "react-router-dom";
+import HomePage from "./pages/home/Home";
 function App() {
+  const userAuth = false;
   return (
-    <>
-      <div className="h-screen w-full flex items-center justify-center">
-        <Button variant="outline" onClick={() => {
-          toast("Event has been created.");
-        }}>
-          Show Toast
-        </Button>
-      </div>
-      <Toaster />
-    </>
+    <div className="h-screen w-full">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/auth"
+            element={
+              userAuth ? <Navigate to="/" replace /> : <div>Auth</div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
