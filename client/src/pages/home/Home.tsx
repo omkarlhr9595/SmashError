@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
           <Button
             className="mt-8 px-10 py-7"
             onClick={() => {
-              navigate("/auth");
+              navigate("/dashboard");
             }}
           >
             GET STARTED
