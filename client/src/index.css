@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -70,6 +71,7 @@
 @layer base {
   * {
     @apply border-border;
+    @apply font-body;
   }
   body {
     @apply bg-background text-foreground;
