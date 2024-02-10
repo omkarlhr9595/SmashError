@@ -1,50 +1,35 @@
-/*
-  Warnings:
-
-  - The primary key for the `Question` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - The primary key for the `User` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - Added the required column `aiAnswer` to the `Question` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `downvote` to the `Question` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `updatedAt` to the `Question` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `upvote` to the `Question` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `class` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `password` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `points` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `role` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `rollNo` to the `User` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Member', 'Core');
 
--- DropIndex
-DROP INDEX "User_email_key";
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "rollNo" INTEGER NOT NULL,
+    "class" TEXT NOT NULL,
+    "points" INTEGER NOT NULL,
+    "role" "Role" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
--- AlterTable
-ALTER TABLE "Question" DROP CONSTRAINT "Question_pkey",
-ADD COLUMN     "aiAnswer" TEXT NOT NULL,
-ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "downvote" INTEGER NOT NULL,
-ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL,
-ADD COLUMN     "upvote" INTEGER NOT NULL,
-ALTER COLUMN "id" DROP DEFAULT,
-ALTER COLUMN "id" SET DATA TYPE TEXT,
-ALTER COLUMN "userId" SET DATA TYPE TEXT,
-ADD CONSTRAINT "Question_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "Question_id_seq";
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
--- AlterTable
-ALTER TABLE "User" DROP CONSTRAINT "User_pkey",
-ADD COLUMN     "class" TEXT NOT NULL,
-ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "password" TEXT NOT NULL,
-ADD COLUMN     "points" INTEGER NOT NULL,
-ADD COLUMN     "role" "Role" NOT NULL,
-ADD COLUMN     "rollNo" INTEGER NOT NULL,
-ALTER COLUMN "id" DROP DEFAULT,
-ALTER COLUMN "id" SET DATA TYPE TEXT,
-ADD CONSTRAINT "User_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "User_id_seq";
+-- CreateTable
+CREATE TABLE "Question" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "aiAnswer" TEXT NOT NULL,
+    "upvote" INTEGER NOT NULL,
+    "downvote" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Question_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Answer" (
@@ -94,6 +79,7 @@ CREATE TABLE "Mentor" (
 CREATE TABLE "Room" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "mentorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -129,6 +115,9 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_QuestionId_fkey" FOREIGN KEY ("Que
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Room" ADD CONSTRAINT "Room_mentorId_fkey" FOREIGN KEY ("mentorId") REFERENCES "Mentor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_RoomToUser" ADD CONSTRAINT "_RoomToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;

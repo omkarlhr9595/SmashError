@@ -12,12 +12,12 @@ generator client {
 //npx prisma generate
 
 model User {
-  id        String     @id @default(uuid())
+  id        Int        @id @default(autoincrement())
   name      String
-  email     String
+  email     String     @unique
   password  String
   rollNo    Int
-  class     String
+  className String
   points    Int
   role      Role
   room      Room[]
@@ -31,7 +31,7 @@ model Question {
   id        String    @id @default(uuid())
   title     String
   content   String
-  userId    String
+  userId    Int
   User      User      @relation("QuestionsFromUser", fields: [userId], references: [id])
   Answer    Answer[]
   comment   Comment[]
@@ -47,7 +47,7 @@ model Answer {
   content    String
   questionId String //duplicate
   Question   Question  @relation(fields: [questionId], references: [id])
-  userId     String
+  userId     Int
   User       User      @relation("AnswersToQuestion", fields: [userId], references: [id])
   Comment    Comment[]
   upvote     Int
@@ -63,7 +63,7 @@ model Comment {
   Answer     Answer   @relation(fields: [answerId], references: [id])
   QuestionId String
   Question   Question @relation(fields: [QuestionId], references: [id])
-  userId     String
+  userId     Int
   User       User     @relation(fields: [userId], references: [id])
   like       Int
   createdAt  DateTime @default(now())
@@ -71,12 +71,13 @@ model Comment {
 }
 
 model Mentor {
-  id           String   @id @default(uuid())
+  id           Int      @id @default(autoincrement())
   name         String
-  email        String
+  email        String   @unique
   password     String
   organization String
   Room         Room[]
+  role         Role     @default(Mentor)
   experience   Int
   expertise    String[]
   linkedIn     String
@@ -87,7 +88,7 @@ model Mentor {
 model Room {
   id        String   @id @default(uuid())
   name      String
-  mentorId  String
+  mentorId  Int
   Mentor    Mentor   @relation(fields: [mentorId], references: [id])
   members   User[] //no need of this
   createdAt DateTime @default(now())
@@ -97,4 +98,5 @@ model Room {
 enum Role {
   Member
   Core
+  Mentor
 }
