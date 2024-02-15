@@ -3,12 +3,16 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Peep from "../../assets/peep-73.svg";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { LoadingPage } from "@/components/loading_page/loading_page";
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
+  const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
     document.title = "Smash Error | Home";
   }, []);
+  if (isLoading) return <LoadingPage />;
   return (
     <div className="flex h-screen w-full">
       <div className="flex h-screen w-[35%] items-center justify-center bg-bgblack">
@@ -35,7 +39,15 @@ const LandingPage: React.FC = () => {
             <Button
               className="mt-4"
               onClick={() => {
-                navigate("/dashboard");
+                setIsLoading(true);
+                if (isAuthenticated) navigate("/dashboard");
+                else
+                  loginWithRedirect({
+                    authorizationParams: {
+                      prompt: "login",
+                      scope: "openid profile email",
+                    },
+                  });
               }}
             >
               GET STARTED

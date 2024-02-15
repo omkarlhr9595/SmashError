@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import DashboardPage from "./pages/dashboard/Dashboard";
 import LandingPage from "./pages/Landing/Landing";
 import ProfilePage from "./pages/profile/Profile";
+import DashboardPage from "./pages/dashboard/dashboard";
 type AppProps = {};
 const App: React.FC<AppProps> = () => {
   return (
