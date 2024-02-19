@@ -18,7 +18,7 @@ const Navbar = () => {
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
       <div className="h-16 w-full">
-        <div className="flex h-full w-full items-center justify-between px-32">
+        <div className="flex h-full w-full items-center justify-between px-28">
           <h1
             className="cursor-pointer font-logo text-3xl"
             onClick={() => {
@@ -59,6 +59,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      <div className="h-[1px] w-full bg-gray-300"></div>
     </Fragment>
   );
 };

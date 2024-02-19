@@ -9,7 +9,7 @@ const App: React.FC<AppProps> = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/*" element={<DashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<LandingPage />} />
         </Routes>
