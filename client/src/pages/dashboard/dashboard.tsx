@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
         access_token: accessToken,
       });
     }
-    setToken(accessToken);
+    setToken({ access_token: accessToken });
   };
 
   const { mutate, error, isPending } = useMutation({

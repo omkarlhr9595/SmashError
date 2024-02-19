@@ -1,13 +1,22 @@
 import { StateCreator } from "zustand";
 
 export interface TokenSlice {
-  token: string | null;
-  setToken: (token: string) => void;
+  token: {
+    access_token: string | null;
+  };
+  setToken: (token: { access_token: string }) => void;
   removeToken: () => void;
 }
 
 export const createTokenSlice: StateCreator<TokenSlice> = (set) => ({
-  token: null,
-  setToken: (token: string) => set({ token: token }),
-  removeToken: () => set({ token: null }),
+  token: {
+    access_token: null,
+  },
+  setToken: (token) => set({ token }),
+  removeToken: () =>
+    set({
+      token: {
+        access_token: null,
+      },
+    }),
 });

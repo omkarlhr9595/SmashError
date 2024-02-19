@@ -13,7 +13,7 @@ import { useStore } from "@/store/store";
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth0();
-  const { removeToken } = useStore();
+  const { removeToken, logoutUser } = useStore();
   return (
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
@@ -48,6 +48,7 @@ const Navbar = () => {
                     logout({
                       logoutParams: { returnTo: window.location.origin },
                     });
+                    logoutUser();
                     removeToken();
                   }}
                 >
