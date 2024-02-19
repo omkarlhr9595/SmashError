@@ -4,13 +4,13 @@ import { LoadingPage } from "@/components/loading_page/loading_page";
 import { useMutation } from "@tanstack/react-query";
 import { getUserDetails } from "../auth/api/auth.api";
 import { useEffect } from "react";
-import { useTokenStore } from "@/store/token.store";
-import { useUserStore } from "@/store/user.store";
+
 import { ErrorPage } from "@/components/error_page/error_page";
+import { useStore } from "@/store/store";
 
 const Dashboard: React.FC = () => {
-  const { setToken } = useTokenStore();
-  const { setUser } = useUserStore();
+  const { setToken, setUser } = useStore();
+
   const { getAccessTokenSilently, user } = useAuth0();
   const getAccessToken = async () => {
     const accessToken = await getAccessTokenSilently();
@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
         access_token: accessToken,
       });
     }
-    setToken({ access_token: accessToken });
+    setToken(accessToken);
   };
 
   const { mutate, error, isPending } = useMutation({

@@ -8,14 +8,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useUserStore } from "@/store/user.store";
-import { useTokenStore } from "@/store/token.store";
+import { useStore } from "@/store/store";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth0();
-  const logoutUser = useUserStore((state) => state.logoutUser);
-  const logoutToken = useTokenStore((state) => state.logoutToken);
+  const { removeToken } = useStore();
   return (
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
@@ -50,8 +48,7 @@ const Navbar = () => {
                     logout({
                       logoutParams: { returnTo: window.location.origin },
                     });
-                    logoutUser();
-                    logoutToken();
+                    removeToken();
                   }}
                 >
                   Logout

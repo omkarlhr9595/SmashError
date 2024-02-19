@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { StateCreator, create } from "zustand";
 import { devOnlyDevtools as devtools } from "./utils.devtools";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -17,27 +17,14 @@ interface User {
   roles: Role | undefined;
 }
 
-interface UserStore {
+export interface UserSlice {
   user: User | null;
   setUser: (user: User) => void;
   logoutUser: () => void;
 }
 
-export const useUserStore = create<UserStore>()(
-  devtools(
-    persist(
-      (set) => ({
-        user: null,
-        setUser: (user) => set({ user }),
-        logoutUser: () =>
-          set({
-            user: null,
-          }),
-      }),
-      {
-        name: "user-store",
-        storage: createJSONStorage(() => localStorage),
-      },
-    ),
-  ),
-);
+export const createUserSlice: StateCreator<UserSlice> = (set) => ({
+  user: null,
+  setUser: (user: User) => set({ user }),
+  logoutUser: () => set({ user: null }),
+});
