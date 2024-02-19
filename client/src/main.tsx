@@ -3,7 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { AUTH0CLIENT, AUTH0DOMAIN } from "./utils/config.ts";
+import { AUTH0CLIENT, AUTH0DOMAIN, audience } from "./utils/config.ts";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
+});
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Auth0Provider
@@ -11,9 +18,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       clientId={AUTH0CLIENT}
       authorizationParams={{
         redirect_uri: window.location.origin + "/dashboard",
+        audience: audience,
       }}
     >
-      <App />
+      <QueryClientProvider client={queryClient} >
+        <App />
+      </QueryClientProvider>
     </Auth0Provider>
   </React.StrictMode>,
 );

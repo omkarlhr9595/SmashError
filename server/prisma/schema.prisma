@@ -13,11 +13,13 @@ generator client {
 
 model User {
   id        Int        @id @default(autoincrement())
+  sub       String     @unique
+  nickname  String
   name      String
   email     String     @unique
-  password  String
-  rollNo    Int
-  className String
+  picture   String
+  rollNo    Int?
+  className String?
   points    Int
   role      Role
   room      Room[]

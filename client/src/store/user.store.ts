@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { devOnlyDevtools as devtools } from "./utils.devtools";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+export enum Role {
+  CORE = "Core",
+  MEMBER = "Member",
+}
+
 interface User {
   email: string | undefined;
   name: string | undefined;
@@ -9,7 +14,7 @@ interface User {
   picture: string | undefined;
   sub: string | undefined;
   updated_at: string | undefined;
-  authToken: string;
+  roles: Role | undefined;
 }
 
 interface UserStore {

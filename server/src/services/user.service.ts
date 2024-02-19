@@ -20,8 +20,10 @@ const createUser = async (
   const role = coreMembers.includes(email) ? Role.Core : Role.Member;
   return await prisma.user.create({
     data: {
+      sub: "",
       email,
-      password: await encryptPassword(password),
+      nickname: "",
+      picture: "",
       name,
       rollNo,
       className,

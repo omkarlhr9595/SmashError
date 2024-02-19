@@ -9,11 +9,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUserStore } from "@/store/user.store";
+import { useTokenStore } from "@/store/token.store";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth0();
   const logoutUser = useUserStore((state) => state.logoutUser);
+  const logoutToken = useTokenStore((state) => state.logoutToken);
   return (
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
@@ -49,6 +51,7 @@ const Navbar = () => {
                       logoutParams: { returnTo: window.location.origin },
                     });
                     logoutUser();
+                    logoutToken();
                   }}
                 >
                   Logout

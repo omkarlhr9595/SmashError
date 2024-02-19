@@ -1,62 +1,51 @@
-import React, { useEffect } from "react";
 import Navbar from "@/components/navbar/Navbar";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { LoadingPage } from "@/components/loading_page/loading_page";
+import { useMutation } from "@tanstack/react-query";
+import { getUserDetails } from "../auth/api/auth.api";
+import { useEffect } from "react";
+import { useTokenStore } from "@/store/token.store";
 import { useUserStore } from "@/store/user.store";
+import { ErrorPage } from "@/components/error_page/error_page";
 
 const Dashboard: React.FC = () => {
-  const { getAccessTokenSilently, user } = useAuth0();
+  const { setToken } = useTokenStore();
   const { setUser } = useUserStore();
-
-  const getUserMetadata = async () => {
-    const domain = "smasherror-dev.us.auth0.com";
-
-    try {
-      const accessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: `https://${domain}/api/v2/`,
-          scope: "read:current_user",
-        },
-      });
-
-      const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
-
-      const metadataResponse = await fetch(userDetailsByIdUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const { user_metadata } = await metadataResponse.json();
-      console.log(user_metadata);
-    } catch (e: any) {
-      console.log(e.message);
-    }
-  };
-
-  const setUserDetails = async () => {
-    const token = await getAccessTokenSilently();
+  const { getAccessTokenSilently, user } = useAuth0();
+  const getAccessToken = async () => {
+    const accessToken = await getAccessTokenSilently();
     if (user) {
-      const userDetails = {
-        email: user.email,
+      mutate({
+        sub: user.sub,
         name: user.name,
         nickname: user.nickname,
+        email: user.email,
         picture: user.picture,
-        sub: user.sub,
-        updated_at: user.updated_at,
-        authToken: token,
-      };
-      console.log(user);
-      
-      setUser(userDetails);
-      getUserMetadata();
+        access_token: accessToken,
+      });
     }
+    setToken({ access_token: accessToken });
   };
 
+  const { mutate, error, isPending } = useMutation({
+    mutationFn: getUserDetails,
+    onSuccess: (data) => {
+      setUser(data);
+    },
+  });
+
   useEffect(() => {
-    setUserDetails();
-    document.title = "Smash Error | Dashboard";
+    getAccessToken();
   }, []);
+
+  if (isPending) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    return <ErrorPage message={error.message} />;
+  }
+
   return (
     <div className="h-screen w-full bg-bgwhite">
       <Navbar />
