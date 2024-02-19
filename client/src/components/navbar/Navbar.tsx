@@ -7,8 +7,13 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useStore } from "@/store/store";
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth0();
+  const { removeToken, logoutUser } = useStore();
   return (
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
@@ -26,7 +31,7 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-0">
                 <Avatar>
-                  <AvatarImage src="" />
+                  <AvatarImage src={user?.picture} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
@@ -38,7 +43,17 @@ const Navbar = () => {
                 >
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {}}>Logout</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    logout({
+                      logoutParams: { returnTo: window.location.origin },
+                    });
+                    logoutUser();
+                    removeToken();
+                  }}
+                >
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
