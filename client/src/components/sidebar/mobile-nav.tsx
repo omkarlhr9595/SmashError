@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   AtSign,
   Hash,
@@ -8,11 +7,13 @@ import {
   Tag,
   User,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
+import { SheetClose } from "../ui/sheet";
 
-export const Sidebar: React.FC = () => {
+export const MobileNav: React.FC = () => {
   const [activeLink, setActiveLink] = useState<string>("");
   const location = useLocation();
 
@@ -95,28 +96,30 @@ export const Sidebar: React.FC = () => {
     setActiveLink(path);
   };
   return (
-    <div className="hidden w-80 border-r border-gray-300 md:block">
-      <nav className="grid gap-2 pl-16 pr-4 pt-16">
+    <div className="w-full border-gray-300">
+      <nav className="grid gap-2 pt-8">
         {sideNavLinks.map((link, index) => {
           return (
-            <Link
-              key={index}
-              to={link.path}
-              onClick={() => handleLinkClick(link.path)}
-              className={cn(
-                buttonVariants({
-                  variant: activeLink === link.path ? "default" : "ghost",
-                  size: "sm",
-                }),
-                index === 3 && "mt-4",
-                link.variant === "default" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start",
-              )}
-            >
-              <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
-            </Link>
+            <SheetClose asChild>
+              <Link
+                key={index}
+                to={link.path}
+                onClick={() => handleLinkClick(link.path)}
+                className={cn(
+                  buttonVariants({
+                    variant: activeLink === link.path ? "default" : "ghost",
+                    size: "sm",
+                  }),
+                  index === 3 && "mt-4",
+                  link.variant === "default" &&
+                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                  "justify-start",
+                )}
+              >
+                <link.icon className="mr-2 h-4 w-4" />
+                {link.title}
+              </Link>
+            </SheetClose>
           );
         })}
       </nav>
