@@ -18,7 +18,7 @@ import { useStore } from "@/store/store";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 
 const Dashboard: React.FC = () => {
-  const { setToken, setUser } = useStore();
+  const { setToken, setUser, token } = useStore();
   const { getAccessTokenSilently, user } = useAuth0();
   const getAccessToken = async () => {
     const accessToken = await getAccessTokenSilently();
@@ -43,7 +43,9 @@ const Dashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    getAccessToken();
+    if (!token.access_token) {
+      getAccessToken();
+    }
   }, []);
 
   if (isPending) {

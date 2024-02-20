@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export function SmashErrorBG() {
   return (
-    <div className="relative w-[40%] flex h-screen flex-col items-center justify-center bg-neutral-950 antialiased">
+    <div className="relative w-[60%] flex h-screen flex-col items-center justify-center bg-neutral-950 antialiased">
       <div className="mx-auto p-4">
         <motion.h1
           className="font-logo text-6xl text-bgwhite"
