@@ -59,12 +59,9 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex h-screen w-full flex-col bg-bgwhite">
       <Navbar />
-      <div className="flex w-full flex-grow">
-        {/* SideNav start */}
+      <div className="flex w-full flex-grow overflow-hidden">
         <Sidebar />
-        {/* SideNav end */}
-        {/* Main Content start */}
-        <div className="flex-grow overflow-scroll">
+        <div className="flex-grow overflow-auto">
           <Routes>
             <Route path="" element={<HomePage />} />
             <Route path="questions" element={<QuestionsPage />} />

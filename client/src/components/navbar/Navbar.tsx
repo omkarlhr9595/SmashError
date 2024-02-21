@@ -27,17 +27,17 @@ const Navbar = () => {
   return (
     <Fragment>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
-      <div className="h-16 w-full">
+      <div className="h-20 w-full md:h-24">
         <div className="flex h-full w-full items-center justify-between px-8 md:px-28">
           <Sheet>
-            <SheetTrigger>
-              <Menu className="md:hidden" size={24} />
+            <SheetTrigger className="md:hidden">
+              <Menu size={24} />
             </SheetTrigger>
             <SheetContent side="left">
               <SheetHeader>
                 <SheetClose asChild>
                   <SheetTitle>
-                    <h1 className="cursor-pointer font-logo text-3xl select-none">
+                    <h1 className="cursor-pointer select-none font-logo text-3xl">
                       SMASH ERROR
                     </h1>
                   </SheetTitle>
