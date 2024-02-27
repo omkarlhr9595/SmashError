@@ -5,6 +5,7 @@ import {
   LucideIcon,
   MessageCircleQuestion,
   Tag,
+  Trophy,
   User,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -24,6 +25,7 @@ export const MobileNav: React.FC = () => {
     ROOMS = "rooms",
     MENTORS = "mentors",
     USERS = "users",
+    LEADERBOARD = "leaderboard",
   }
 
   useEffect(() => {
@@ -45,6 +47,9 @@ export const MobileNav: React.FC = () => {
         break;
       case LinkPath.USERS:
         setActiveLink(LinkPath.USERS);
+        break;
+      case LinkPath.LEADERBOARD:
+        setActiveLink(LinkPath.LEADERBOARD);
         break;
       default:
         setActiveLink(LinkPath.HOME);
@@ -90,6 +95,12 @@ export const MobileNav: React.FC = () => {
       path: LinkPath.USERS,
       variant: "ghost",
     },
+    {
+      title: "Leaderboard",
+      icon: Trophy,
+      path: LinkPath.LEADERBOARD,
+      variant: "ghost",
+    },
   ];
 
   const handleLinkClick = (path: string) => {
@@ -111,6 +122,7 @@ export const MobileNav: React.FC = () => {
                     size: "sm",
                   }),
                   index === 3 && "mt-4",
+                  index === 6 && "mt-4",
                   link.variant === "default" &&
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                   "justify-start",

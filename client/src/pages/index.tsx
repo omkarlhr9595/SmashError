@@ -5,3 +5,4 @@ export { default as TagsPage } from "./tags/tags";
 export { default as RoomsPage } from "./rooms/rooms";
 export { default as MentorsPage } from "./mentors/mentors";
 export { default as UsersPage } from "./users/users";
+export { default as LeaderboardPage } from "./leaderboard/leaderboard";

@@ -13,6 +13,7 @@ import {
   RoomsPage,
   MentorsPage,
   UsersPage,
+  LeaderboardPage,
 } from "../index";
 import { useStore } from "@/store/store";
 import { Sidebar } from "@/components/sidebar/Sidebar";
@@ -20,6 +21,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 const Dashboard: React.FC = () => {
   const { setToken, setUser, token } = useStore();
   const { getAccessTokenSilently, user } = useAuth0();
+
   const getAccessToken = async () => {
     const accessToken = await getAccessTokenSilently();
     if (user) {
@@ -69,6 +71,7 @@ const Dashboard: React.FC = () => {
             <Route path="rooms" element={<RoomsPage />} />
             <Route path="mentors" element={<MentorsPage />} />
             <Route path="users" element={<UsersPage />} />
+            <Route path="leaderboard" element={<LeaderboardPage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </div>
