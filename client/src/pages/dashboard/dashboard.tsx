@@ -14,6 +14,7 @@ import {
   MentorsPage,
   UsersPage,
   LeaderboardPage,
+  AskPage,
 } from "../index";
 import { useStore } from "@/store/store";
 import { Sidebar } from "@/components/sidebar/Sidebar";
@@ -66,6 +67,7 @@ const Dashboard: React.FC = () => {
         <div className="flex-grow overflow-auto">
           <Routes>
             <Route path="" element={<HomePage />} />
+            <Route path="ask" element={<AskPage />} />
             <Route path="questions" element={<QuestionsPage />} />
             <Route path="tags" element={<TagsPage />} />
             <Route path="rooms" element={<RoomsPage />} />

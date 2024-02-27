@@ -1,7 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import LandingPage from "./pages/Landing/Landing";
-import ProfilePage from "./pages/profile/Profile";
-import DashboardPage from "./pages/dashboard/dashboard";
+
+import { AskPage, LandingPage, DashboardPage, ProfilePage } from "./pages";
 type AppProps = {};
 const App: React.FC<AppProps> = () => {
   return (

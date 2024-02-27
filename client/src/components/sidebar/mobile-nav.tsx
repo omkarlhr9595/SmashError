@@ -2,6 +2,7 @@ import {
   AtSign,
   Hash,
   Home,
+  List,
   LucideIcon,
   MessageCircleQuestion,
   Tag,
@@ -20,6 +21,7 @@ export const MobileNav: React.FC = () => {
 
   enum LinkPath {
     HOME = "",
+    ASK = "ask",
     QUESTIONS = "questions",
     TAGS = "tags",
     ROOMS = "rooms",
@@ -32,6 +34,9 @@ export const MobileNav: React.FC = () => {
     switch (location.pathname.split("/")[2]) {
       case LinkPath.HOME:
         setActiveLink(LinkPath.HOME);
+        break;
+      case LinkPath.ASK:
+        setActiveLink(LinkPath.ASK);
         break;
       case LinkPath.QUESTIONS:
         setActiveLink(LinkPath.QUESTIONS);
@@ -66,8 +71,14 @@ export const MobileNav: React.FC = () => {
   const sideNavLinks: LinkItem[] = [
     { title: "Home", icon: Home, path: LinkPath.HOME, variant: "default" },
     {
-      title: "Questions",
+      title: "Ask",
       icon: MessageCircleQuestion,
+      path: LinkPath.ASK,
+      variant: "ghost",
+    },
+    {
+      title: "Questions",
+      icon: List,
       path: LinkPath.QUESTIONS,
       variant: "ghost",
     },
@@ -121,8 +132,8 @@ export const MobileNav: React.FC = () => {
                     variant: activeLink === link.path ? "default" : "ghost",
                     size: "sm",
                   }),
-                  index === 3 && "mt-4",
-                  index === 6 && "mt-4",
+                  index === 4 && "mt-4",
+                  index === 7 && "mt-4",
                   link.variant === "default" &&
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                   "justify-start",

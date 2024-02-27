@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   enum Tab {
@@ -9,6 +10,7 @@ const HomePage: React.FC = () => {
     WEEK = "week",
   }
   const [tab, setTab] = React.useState(Tab.HOT);
+  const navigate = useNavigate();
   const buttonVariant = (buttonTab: Tab) => {
     return tab === buttonTab ? "default" : "outline";
   };
@@ -118,7 +120,14 @@ const HomePage: React.FC = () => {
     <div className="">
       <div className="flex h-20 w-full items-center justify-between px-4 py-8">
         <h1 className="text-2xl font-medium">Top Questions</h1>
-        <Button className="">Ask Question</Button>
+        <Button
+          className=""
+          onClick={() => {
+            navigate("/questions/ask");
+          }}
+        >
+          Ask Question
+        </Button>
       </div>
       <div className="flex h-20 w-full items-center justify-end px-4 pb-12 pt-8">
         <div className="flex w-full md:w-1/2">
