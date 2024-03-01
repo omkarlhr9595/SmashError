@@ -123,7 +123,7 @@ const HomePage: React.FC = () => {
         <Button
           className=""
           onClick={() => {
-            navigate("/questions/ask");
+            navigate("ask");
           }}
         >
           Ask Question

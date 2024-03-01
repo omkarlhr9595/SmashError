@@ -25,7 +25,7 @@ const Navbar = () => {
   const { user, logout } = useAuth0();
   const { removeToken, logoutUser } = useStore();
   return (
-    <Fragment>
+    <div>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
       <div className="h-20 w-full md:h-24">
         <div className="flex h-full w-full items-center justify-between px-8 md:px-28">
@@ -88,7 +88,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="h-[1px] w-full bg-gray-300"></div>
-    </Fragment>
+    </div>
   );
 };
 
