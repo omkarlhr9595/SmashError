@@ -1,7 +1,5 @@
-import { Request, Response, NextFunction } from "express";
 import jwt = require("express-jwt");
-import jwksClient from "jwks-rsa";
-
+import jwksClient = require("jwks-rsa");
 const auth0Domain = process.env.AUTH0_DOMAIN;
 
 const authCheck = jwt.expressjwt({
@@ -16,6 +14,4 @@ const authCheck = jwt.expressjwt({
   algorithms: ["RS256"],
 });
 
-export  {
-  authCheck,
-};
+export { authCheck };

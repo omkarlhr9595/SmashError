@@ -9,3 +9,4 @@ export { default as LeaderboardPage } from "./leaderboard/leaderboard";
 export { default as AskPage } from "./ask/ask";
 export { default as DashboardPage } from "./dashboard/dashboard";
 export { default as ProfilePage } from "./profile/profile";
+export { default as QuestionByIdPage } from "./questions/questionById";

@@ -18,6 +18,11 @@ import z from "zod";
 import remarkGfm from "remark-gfm";
 import { Textarea } from "@/components/ui/textarea";
 import { Tag, TagInput } from "@/components/ui/tag-input";
+import { useMutation } from "@tanstack/react-query";
+import { ask } from "../api/questions.api";
+import { useStore } from "@/store/store";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(15, {
@@ -39,13 +44,39 @@ const formSchema = z.object({
 });
 
 const AskPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { user, token } = useStore();
+  const sub = user?.sub;
+  const access_token = token?.access_token;
+
+  const { mutate, error, isPending } = useMutation({
+    mutationFn: ask,
+    onSuccess: (data) => {
+      navigate(`/question/${data.data.id}`);
+    },
+    onError: (error) => {
+      toast("Error occurred while asking question.");
+    },
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
+    try {
+      mutate({
+        sub: sub ?? "",
+        title: values.title,
+        body: values.body,
+        tags: values.tags.map((tag) => tag.text),
+        access_token: access_token ?? "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
   const [body, setBody] = React.useState<string>("");
   const [tags, setTags] = React.useState<Tag[]>([]);
@@ -54,11 +85,14 @@ const AskPage: React.FC = () => {
     else setBody("");
   }, [form.watch().body]);
 
+  if (isPending) return <div>Loading...</div>;
+
   return (
     <div className="mb-20">
       <div className="flex h-20 w-full px-4 py-8">
         <h1 className="text-2xl font-medium">Ask Question</h1>
       </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

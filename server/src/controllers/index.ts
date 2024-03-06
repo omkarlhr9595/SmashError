@@ -1,3 +1,4 @@
 // export { default as authController } from "./auth.controller";
 export { default as userController } from "./user.controller";
 export { default as oauthController } from "./oauth.controller";
+export { default as questionController } from "./question.controller";

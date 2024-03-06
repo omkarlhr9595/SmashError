@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { LoadingPage } from "@/components/loading_page/loading_page";
 import { useMutation } from "@tanstack/react-query";
-import { getUserDetails } from "../auth/api/auth.api";
+import { getUserDetails } from "../api/auth.api";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ErrorPage } from "@/components/error_page/error_page";
@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
       });
     }
     setToken({ access_token: accessToken });
-  };
+  }; 
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: getUserDetails,

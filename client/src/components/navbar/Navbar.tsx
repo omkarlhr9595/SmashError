@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -20,7 +19,11 @@ import {
 import { Menu } from "lucide-react";
 import { MobileNav } from "../sidebar/mobile-nav";
 
-const Navbar = () => {
+type NavbarProps = {
+  showBurger: boolean;
+};
+
+const Navbar = ({ showBurger }: NavbarProps = { showBurger: true }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth0();
   const { removeToken, logoutUser } = useStore();
@@ -29,28 +32,30 @@ const Navbar = () => {
       <div className="h-1 w-full bg-[#ff90e8]"></div>
       <div className="h-20 w-full md:h-24">
         <div className="flex h-full w-full items-center justify-between px-8 md:px-28">
-          <Sheet>
-            <SheetTrigger className="md:hidden">
-              <Menu size={24} />
-            </SheetTrigger>
-            <SheetContent side="left">
-              <SheetHeader>
-                <SheetClose asChild>
-                  <SheetTitle>
-                    <h1 className="cursor-pointer select-none font-logo text-3xl">
-                      SMASH ERROR
-                    </h1>
-                  </SheetTitle>
-                </SheetClose>
-              </SheetHeader>
-              <MobileNav />
-            </SheetContent>
-          </Sheet>
+          {showBurger ? (
+            <Sheet>
+              <SheetTrigger className="md:hidden">
+                <Menu size={24} />
+              </SheetTrigger>
+              <SheetContent side="left">
+                <SheetHeader>
+                  <SheetClose asChild>
+                    <SheetTitle>
+                      <h1 className="cursor-pointer select-none font-logo text-3xl">
+                        SMASH ERROR
+                      </h1>
+                    </SheetTitle>
+                  </SheetClose>
+                </SheetHeader>
+                <MobileNav />
+              </SheetContent>
+            </Sheet>
+          ) : null}
 
           <h1
             className="cursor-pointer font-logo text-3xl"
             onClick={() => {
-              navigate("/");
+              navigate("/dashboard");
             }}
           >
             SMASH ERROR
