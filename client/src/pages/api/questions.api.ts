@@ -47,4 +47,20 @@ const getQuestionById = async (id: string) => {
   return response.data.data as getQuestionById;
 };
 
-export { ask, getQuestionById };
+enum Filter {
+  HIGHEST_VOTES = "highest-votes",
+  NEWEST = "newest",
+  THIS_WEEK = "this-week",
+}
+
+const getAllQuestions = async (filter?: Filter) => {
+  let url = `${BASE_URL}/v1/questions`;
+  if (filter) {
+    url += `?filter=${filter}`;
+  }
+  const response = await axios.get(url);
+  
+  return response.data.data;
+};
+
+export { ask, getQuestionById, getAllQuestions, Filter };

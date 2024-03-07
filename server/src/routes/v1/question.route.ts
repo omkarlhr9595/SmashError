@@ -19,4 +19,19 @@ router.get(
   questionController.getQuestionById
 );
 
+router.get("/", questionController.getAllQuestions);
+
+router.post(
+  "/vote",
+  validate(questionValidation.voteQuestion),
+  authCheck,
+  questionController.voteQuestion
+);
+
+router.post(
+  "/:questionId/view",
+  validate(questionValidation.addView),
+  questionController.addView
+);
+
 export default router;

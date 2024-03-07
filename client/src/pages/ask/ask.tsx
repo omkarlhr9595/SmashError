@@ -79,10 +79,16 @@ const AskPage: React.FC = () => {
     }
   }
   const [body, setBody] = React.useState<string>("");
+
   const [tags, setTags] = React.useState<Tag[]>([]);
+
   React.useEffect(() => {
-    if (form.watch().body) setBody(form.watch().body);
-    else setBody("");
+    const watchedBody = form.watch().body;
+    if (watchedBody !== undefined) {
+      setBody(watchedBody);
+    } else {
+      setBody("");
+    }
   }, [form.watch().body]);
 
   if (isPending) return <div>Loading...</div>;

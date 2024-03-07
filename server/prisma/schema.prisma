@@ -9,51 +9,57 @@ generator client {
 }
 
 //npx prisma migrate dev --name init
+//npx prisma db push
 //npx prisma generate
 
 model User {
-  id        Int        @id @default(autoincrement())
-  sub       String     @unique
-  nickname  String
-  name      String
-  email     String     @unique
-  picture   String
-  rollNo    Int?
-  className String?
-  points    Int
-  role      Role
-  room      Room[]
-  createdAt DateTime   @default(now())
-  Question  Question[] @relation("QuestionsFromUser")
-  Answer    Answer[]   @relation("AnswersToQuestion")
-  Comment   Comment[]
+  sub               String     @id @unique
+  nickname          String
+  name              String
+  email             String     @unique
+  picture           String
+  rollNo            Int?
+  className         String?
+  points            Int
+  role              Role
+  room              Room[]
+  createdAt         DateTime   @default(now())
+  question          Question[] @relation("QuestionsFromUser")
+  answer            Answer[]   @relation("AnswersToQuestion")
+  upvotedQuestion   Question[] @relation("UpvotedQuestion")
+  downvotedQUestion Question[] @relation("DownvotedQuestion")
+  upvotedAnswer     Answer[]   @relation("UpvotedAnswer")
+  downvotedAnswer   Answer[]   @relation("DownvotedAnswer")
+  comment           Comment[]
 }
 
 model Question {
   id        String    @id @default(uuid())
   title     String
   content   String
-  userId    Int
-  User      User      @relation("QuestionsFromUser", fields: [userId], references: [id])
-  Answer    Answer[]
+  userSub   String
+  user      User      @relation("QuestionsFromUser", fields: [userSub], references: [sub])
+  answer    Answer[]
   comment   Comment[]
   aiAnswer  String
-  upvote    Int
-  downvote  Int
+  upvote    User[]    @relation("UpvotedQuestion")
+  downvote  User[]    @relation("DownvotedQuestion")
+  views     Int       @default(0)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  tags      String[]
 }
 
 model Answer {
   id         String    @id @default(uuid())
   content    String
   questionId String //duplicate
-  Question   Question  @relation(fields: [questionId], references: [id])
-  userId     Int
-  User       User      @relation("AnswersToQuestion", fields: [userId], references: [id])
-  Comment    Comment[]
-  upvote     Int
-  downvote   Int
+  question   Question  @relation(fields: [questionId], references: [id])
+  userSub    String
+  user       User      @relation("AnswersToQuestion", fields: [userSub], references: [sub])
+  comment    Comment[]
+  upvote     User[]    @relation("UpvotedAnswer")
+  downvote   User[]    @relation("DownvotedAnswer")
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 }
@@ -62,12 +68,11 @@ model Comment {
   id         Int      @id @default(autoincrement())
   content    String
   answerId   String
-  Answer     Answer   @relation(fields: [answerId], references: [id])
-  QuestionId String
-  Question   Question @relation(fields: [QuestionId], references: [id])
-  userId     Int
-  User       User     @relation(fields: [userId], references: [id])
-  like       Int
+  answer     Answer   @relation(fields: [answerId], references: [id])
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  userSub    String
+  User       User     @relation(fields: [userSub], references: [sub])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -91,7 +96,7 @@ model Room {
   id        String   @id @default(uuid())
   name      String
   mentorId  Int
-  Mentor    Mentor   @relation(fields: [mentorId], references: [id])
+  mentor    Mentor   @relation(fields: [mentorId], references: [id])
   members   User[] //no need of this
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

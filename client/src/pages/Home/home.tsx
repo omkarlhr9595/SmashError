@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Filter, getAllQuestions } from "../api/questions.api";
 
 const HomePage: React.FC = () => {
+  const [question, setQuestion] = React.useState<Question[]>([]);
+  const { data } = useQuery({
+    queryKey: ["questions", Filter.HIGHEST_VOTES],
+    queryFn: () => getAllQuestions(Filter.HIGHEST_VOTES),
+  });
+
   enum Tab {
     HOT = "hot",
     VOTES = "votes",
@@ -14,107 +22,13 @@ const HomePage: React.FC = () => {
   const buttonVariant = (buttonTab: Tab) => {
     return tab === buttonTab ? "default" : "outline";
   };
-  type Question = {
-    title: string;
-    body: string;
-    tags: string[];
-    votes: number;
-    answers: number;
-    views: string;
-    created: string;
-    closed: boolean;
-    user: {
-      name: string;
-      avatar: string;
-    };
-  };
 
-  const dummyQuestions: Question[] = [
-    {
-      title: "How to use React?",
-      body: "I am new to React and I want to know how to use it.",
-      tags: ["react", "javascript"],
-      votes: 10,
-      answers: 5,
-      views: "100",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "John Doe",
-        avatar: "https://secure.gravatar.com/avatar/321?s=164&d=identicon",
-      },
-    },
-    {
-      title: "How to use Figma?",
-      body: "I am new to Figma and I want to know how to use it.",
-      tags: ["figma", "design"],
-      votes: 53,
-      answers: 5,
-      views: "1k",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "Ajay Lohar",
-        avatar: "https://secure.gravatar.com/avatar/omkar?s=164&d=identicon",
-      },
-    },
-    {
-      title: "How to use Tailwind CSS?",
-      body: "I am new to Tailwind CSS and I want to know how to use it.",
-      tags: ["tailwindcss", "css"],
-      votes: 10,
-      answers: 5,
-      views: "100",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "Naresh Bhatia",
-        avatar: "https://secure.gravatar.com/avatar/321321?s=164&d=identicon",
-      },
-    },
-    {
-      title: "How to use Flutter?",
-      body: "I am new to Flutter and I want to know how to use it.",
-      tags: ["flutter", "dart"],
-      votes: 131,
-      answers: 5,
-      views: "10k",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "Sarthak Sharma",
-        avatar: "https://secure.gravatar.com/avatar/32132?s=164&d=identicon",
-      },
-    },
-    {
-      title: "How to get started with GraphQL?",
-      body: "I am new to GraphQL and I want to know how to use it.",
-      tags: ["graphql", "javascript"],
-      votes: 10,
-      answers: 5,
-      views: "100",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "John Doe",
-        avatar: "https://secure.gravatar.com/avatar/321?s=164&d=identicon",
-      },
-    },
-    {
-      title: "How to get started with GraphQL?",
-      body: "I am new to GraphQL and I want to know how to use it.",
-      tags: ["graphql", "javascript"],
-      votes: 10,
-      answers: 5,
-      views: "100",
-      created: "2021-10-10",
-      closed: false,
-      user: {
-        name: "John Doe",
-        avatar: "https://secure.gravatar.com/avatar/321?s=164&d=identicon",
-      },
-    },
-  ];
+  useEffect(() => {
+    if (data) {
+      setQuestion(data);
+      console.log(data);
+    }
+  }, [data]);
 
   return (
     <div className="">
@@ -162,41 +76,104 @@ const HomePage: React.FC = () => {
         </div>
       </div>
       <div className="divide-y border-y">
-        {dummyQuestions.map((question, index) => {
-          return (
-            <div
-              key={index}
-              className="flex w-full items-center justify-between px-4 py-8 md:px-40"
-            >
-              <div className="flex w-full items-center justify-between">
-                <div className="flex items-center">
-                  <img
-                    src={question.user.avatar}
-                    alt="user"
-                    className="h-10 w-10 rounded-full"
-                  />
-                  <div className="ml-4">
-                    <h1 className="text-lg font-medium">{question.title}</h1>
-                    <p className="text-sm text-gray-500">
-                      {question.user.name}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-500">
-                    {question.votes} votes
-                  </p>
-                  <p className="ml-4 text-sm text-gray-500">
-                    {question.answers} answers
-                  </p>
-                  <p className="ml-4 text-sm text-gray-500">
-                    {question.views} views
-                  </p>
-                </div>
+        {question?.map((question: Question) => (
+          <QuestionCard key={question.id} question={question} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const dummyUsers: User[] = [
+  {
+    sub: "1",
+    nickname: "John Doe",
+    name: "John Doe",
+    email: "dumm@gmail.com",
+    picture: "https://avatars.githubusercontent.com/u/65306391?v=4",
+    rollNo: "123456",
+    className: "BSCS-1A",
+    points: 100,
+    role: "user",
+    createdAt: "2021-09-01",
+  },
+];
+
+const dummyQuestions: Question[] = [
+  {
+    id: "be67d4c9-5519-4d35-9a1f-59297e9eec53",
+    title: "How to solve this problem?",
+    content: "I am facing this issue and I don't know how to solve it",
+    userSub: "1",
+    aiAnswer: "This is an AI answer",
+    createdAt: "2021-09-01",
+    updatedAt: "2021-09-01",
+    user: dummyUsers[0],
+    upvote: ["1"],
+    downvote: [],
+    vote: 1,
+    views: 10,
+    comment: [],
+    answer: [],
+    tags: ["react", "javascript"],
+  },
+  {
+    id: "be67d4c9-5519-4d35-9a1f-59297e9eec53 ads",
+    title: "How to solve this problem?",
+    content:
+      "I am facing this issue and I don't know how to solve it this is a very long content and I am testing it",
+    userSub: "1",
+    aiAnswer: "This is an AI answer",
+    createdAt: "2021-09-01",
+    updatedAt: "2021-09-01",
+    user: dummyUsers[0],
+    upvote: ["1"],
+    downvote: [],
+    vote: 1,
+    views: 1,
+    comment: [],
+    answer: [],
+    tags: ["react", "javascript", "typescript", "nextjs", "prisma", "graphql"],
+  },
+];
+
+const QuestionCard: React.FC<{ question: Question }> = ({ question }) => {
+  return (
+    <div className="p-4 md:px-24">
+      <div className="flex">
+        <div className="space-y-1">
+          <p className="text-xs">{question?.vote} votes</p>
+          <p className="text-xs">{question?.answer?.length} answers</p>
+          <p className="text-xs">{question?.views} views</p>
+        </div>
+        <div className="ml-4">
+          <Link to={`/question/${question?.id}`}>
+            <h1 className="text-lg font-medium text-[#165BA2] hover:font-bold hover:underline">
+              {question?.title}
+            </h1>
+          </Link>
+          <div className="mt-1 flex w-full flex-wrap">
+            {question?.tags.map((tag) => (
+              <div className="m-1 rounded bg-bgblack px-2 py-1" key={tag}>
+                <h1 className="text-sm font-light text-white">{tag}</h1>
               </div>
-            </div>
-          );
-        })}
+            ))}
+            <Link
+              to={`/profile/${question?.user?.sub}`}
+              className="flex items-center justify-self-end"
+            >
+              <img
+                src={question?.user?.picture}
+                alt="user"
+                className="m-1 size-6 rounded"
+              />
+              <h1 className="text-sm font-medium text-[#165BA2] hover:font-bold hover:underline">
+                {question?.user?.name}
+              </h1>
+            </Link>
+          </div>
+          <p className="mt-2 text-xs">Asked on {question?.createdAt}</p>
+        </div>
       </div>
     </div>
   );

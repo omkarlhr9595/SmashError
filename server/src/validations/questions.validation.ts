@@ -12,7 +12,22 @@ const getQuestionById = {
     id: Joi.string().required(),
   }),
 };
+const voteQuestion = {
+  body: Joi.object().keys({
+    questionId: Joi.string().required(),
+    userSub: Joi.string().required(),
+    vote: Joi.string().valid("upvote", "downvote").required(),
+  }),
+};
+const addView = {
+  params: Joi.object().keys({
+    questionId: Joi.string().required(),
+  }),
+};
+
 export default {
   ask,
   getQuestionById,
+  voteQuestion,
+  addView,
 };

@@ -20,13 +20,15 @@ import { Menu } from "lucide-react";
 import { MobileNav } from "../sidebar/mobile-nav";
 
 type NavbarProps = {
-  showBurger: boolean;
+  showBurger?: boolean;
 };
 
-const Navbar = ({ showBurger }: NavbarProps = { showBurger: true }) => {
+const Navbar = ({ showBurger = true }: NavbarProps) => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth0();
+  const { logout } = useAuth0();
+  const { user } = useStore();
   const { removeToken, logoutUser } = useStore();
+
   return (
     <div>
       <div className="h-1 w-full bg-[#ff90e8]"></div>
