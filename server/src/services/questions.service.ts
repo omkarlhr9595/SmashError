@@ -29,8 +29,6 @@ const getQuestionById = async (id: string) => {
     },
     include: {
       user: true,
-      upvote: true,
-      downvote: true,
       answer: true,
       comment: true,
     },
@@ -43,8 +41,6 @@ const getAllQuestionsByHighestVotes = async () => {
   const questions = await prisma.question.findMany({
     include: {
       user: true, // Include the User relation
-      upvote: true, // Include the upvote relation
-      downvote: true, // Include the downvote relation
       answer: true, // Include the Answer relation
       comment: true, // Include the comment relation
     },
@@ -71,8 +67,6 @@ const getAllQuestionsByNewest = async () => {
     },
     include: {
       user: true, // Include the User relation
-      upvote: true, // Include the upvote relation
-      downvote: true, // Include the downvote relation
       answer: true, // Include the Answer relation
       comment: true, // Include the comment relation
     },
@@ -90,8 +84,6 @@ const getAllQuestionsThisWeek = async () => {
     },
     include: {
       user: true, // Include the User relation
-      upvote: true, // Include the upvote relation
-      downvote: true, // Include the downvote relation
       answer: true, // Include the Answer relation
       comment: true, // Include the comment relation
     },
@@ -104,8 +96,6 @@ const getAllQuestions = async () => {
   const questions = await prisma.question.findMany({
     include: {
       user: true, // Include the User relation
-      upvote: true, // Include the upvote relation
-      downvote: true, // Include the downvote relation
       answer: true, // Include the Answer relation
       comment: true, // Include the comment relation
     },
@@ -123,123 +113,81 @@ const voteQuestion = async (
     where: {
       id: questionId,
     },
-    include: {
-      upvote: true,
-      downvote: true,
-    },
   });
 
   if (!question) {
     throw new Error("Question not found");
   }
 
-  const isUpvoted = question.upvote.some((upvote) => upvote.sub === userSub);
-  const isDownvoted = question.downvote.some(
-    (downvote) => downvote.sub === userSub
-  );
+  const user = await prisma.user.findUnique({
+    where: {
+      sub: userSub,
+    },
+  });
 
-  const voted = isUpvoted || isDownvoted;
+  if (!user) {
+    throw new Error("User not found");
+  }
 
-  if (voted) {
+  const isUpvoted = question.upvote.find((u) => u === userSub);
+  const isDownvoted = question.downvote.find((u) => u === userSub);
+
+  if (vote === "upvote") {
     if (isUpvoted) {
-      if (vote === "upvote") {
-        await prisma.question.update({
-          where: {
-            id: questionId,
-          },
-          data: {
-            upvote: {
-              disconnect: {
-                sub: userSub,
-              },
-            },
-          },
-        });
-      } else {
-        await prisma.question.update({
-          where: {
-            id: questionId,
-          },
-          data: {
-            upvote: {
-              disconnect: {
-                sub: userSub,
-              },
-            },
-            downvote: {
-              connect: {
-                sub: userSub,
-              },
-            },
-          },
-        });
-      }
-    }
-    if (isDownvoted) {
-      if (vote === "downvote") {
-        await prisma.question.update({
-          where: {
-            id: questionId,
-          },
-          data: {
-            downvote: {
-              disconnect: {
-                sub: userSub,
-              },
-            },
-          },
-        });
-      } else {
-        await prisma.question.update({
-          where: {
-            id: questionId,
-          },
-          data: {
-            downvote: {
-              disconnect: {
-                sub: userSub,
-              },
-            },
-            upvote: {
-              connect: {
-                sub: userSub,
-              },
-            },
-          },
-        });
-      }
-    }
-  } else {
-    if (vote === "upvote") {
       await prisma.question.update({
         where: {
           id: questionId,
         },
         data: {
           upvote: {
-            connect: {
-              sub: userSub,
-            },
+            set: question.upvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    } else {
+      await prisma.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          upvote: {
+            push: userSub,
+          },
+          downvote: {
+            set: question.downvote.filter((u) => u !== userSub),
           },
         },
       });
     }
-
-    if (vote === "downvote") {
+  } else {
+    if (isDownvoted) {
       await prisma.question.update({
         where: {
           id: questionId,
         },
         data: {
           downvote: {
-            connect: {
-              sub: userSub,
-            },
+            set: question.downvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    } else {
+      await prisma.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          downvote: {
+            push: userSub,
+          },
+          upvote: {
+            set: question.upvote.filter((u) => u !== userSub),
           },
         },
       });
     }
   }
+
 };
 
 const addView = async (questionId: string) => {

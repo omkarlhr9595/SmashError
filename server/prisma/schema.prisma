@@ -13,24 +13,20 @@ generator client {
 //npx prisma generate
 
 model User {
-  sub               String     @id @unique
-  nickname          String
-  name              String
-  email             String     @unique
-  picture           String
-  rollNo            Int?
-  className         String?
-  points            Int
-  role              Role
-  room              Room[]
-  createdAt         DateTime   @default(now())
-  question          Question[] @relation("QuestionsFromUser")
-  answer            Answer[]   @relation("AnswersToQuestion")
-  upvotedQuestion   Question[] @relation("UpvotedQuestion")
-  downvotedQUestion Question[] @relation("DownvotedQuestion")
-  upvotedAnswer     Answer[]   @relation("UpvotedAnswer")
-  downvotedAnswer   Answer[]   @relation("DownvotedAnswer")
-  comment           Comment[]
+  sub       String     @id @unique
+  nickname  String
+  name      String
+  email     String     @unique
+  picture   String
+  rollNo    Int?
+  className String?
+  points    Int
+  role      Role
+  room      Room[]
+  createdAt DateTime   @default(now())
+  question  Question[] @relation("QuestionsFromUser")
+  answer    Answer[]   @relation("AnswersToQuestion")
+  comment Comment[]
 }
 
 model Question {
@@ -42,8 +38,8 @@ model Question {
   answer    Answer[]
   comment   Comment[]
   aiAnswer  String
-  upvote    User[]    @relation("UpvotedQuestion")
-  downvote  User[]    @relation("DownvotedQuestion")
+  upvote    String[]  @default([])
+  downvote  String[]  @default([])
   views     Int       @default(0)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -58,8 +54,8 @@ model Answer {
   userSub    String
   user       User      @relation("AnswersToQuestion", fields: [userSub], references: [sub])
   comment    Comment[]
-  upvote     User[]    @relation("UpvotedAnswer")
-  downvote   User[]    @relation("DownvotedAnswer")
+  upvote     String[]  @default([])
+  downvote   String[]  @default([])
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 }

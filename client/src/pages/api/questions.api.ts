@@ -1,7 +1,7 @@
 import { BASE_URL } from "@/utils/config";
 import axios from "axios";
 
-type Question = {
+type AskQuestion = {
   sub: string;
   title: string;
   body: string;
@@ -9,7 +9,7 @@ type Question = {
   access_token: string;
 };
 
-const ask = async (data: Question) => {
+const ask = async (data: AskQuestion) => {
   const response = await axios.post(
     `${BASE_URL}/v1/questions/ask`,
     {
@@ -27,24 +27,13 @@ const ask = async (data: Question) => {
   return response.data;
 };
 
-type getQuestionById = {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  userId: number;
-  upvote: number;
-  downvote: number;
-};
-
 const getQuestionById = async (id: string) => {
   const response = await axios.get(`${BASE_URL}/v1/questions/${id}`);
   console.log(response.data.data);
 
   if (response.data.data === null) throw new Error("Question not found");
 
-  return response.data.data as getQuestionById;
+  return response.data.data as Question;
 };
 
 enum Filter {
@@ -59,8 +48,32 @@ const getAllQuestions = async (filter?: Filter) => {
     url += `?filter=${filter}`;
   }
   const response = await axios.get(url);
-  
+
   return response.data.data;
 };
 
-export { ask, getQuestionById, getAllQuestions, Filter };
+const voteQuestion = async (
+  questionId: string,
+  vote: "upvote" | "downvote",
+  userSub: string,
+  access_token: string,
+) => {
+  const response = await axios.post(
+    `${BASE_URL}/v1/questions/vote`,
+    {
+      questionId,
+      vote,
+      userSub,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    },
+  );
+  console.log(response.data);
+
+  return response.data.data;
+};
+
+export { ask, getQuestionById, getAllQuestions, Filter, voteQuestion };

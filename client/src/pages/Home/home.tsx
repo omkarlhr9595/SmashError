@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Filter, getAllQuestions } from "../api/questions.api";
-
+import { Skeleton } from "@/components/ui/skeleton";
+import { QuestionCardSkeleton } from "@/components/skeleton/questionCard.skeleton";
 const HomePage: React.FC = () => {
   const [question, setQuestion] = React.useState<Question[]>([]);
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["questions", Filter.HIGHEST_VOTES],
     queryFn: () => getAllQuestions(Filter.HIGHEST_VOTES),
   });
@@ -76,6 +77,11 @@ const HomePage: React.FC = () => {
         </div>
       </div>
       <div className="divide-y border-y">
+        {isLoading &&
+          Array(6)
+            .fill(0)
+            .map((_, i) => <QuestionCardSkeleton key={i} />)}
+
         {question?.map((question: Question) => (
           <QuestionCard key={question.id} question={question} />
         ))}
@@ -83,59 +89,6 @@ const HomePage: React.FC = () => {
     </div>
   );
 };
-
-const dummyUsers: User[] = [
-  {
-    sub: "1",
-    nickname: "John Doe",
-    name: "John Doe",
-    email: "dumm@gmail.com",
-    picture: "https://avatars.githubusercontent.com/u/65306391?v=4",
-    rollNo: "123456",
-    className: "BSCS-1A",
-    points: 100,
-    role: "user",
-    createdAt: "2021-09-01",
-  },
-];
-
-const dummyQuestions: Question[] = [
-  {
-    id: "be67d4c9-5519-4d35-9a1f-59297e9eec53",
-    title: "How to solve this problem?",
-    content: "I am facing this issue and I don't know how to solve it",
-    userSub: "1",
-    aiAnswer: "This is an AI answer",
-    createdAt: "2021-09-01",
-    updatedAt: "2021-09-01",
-    user: dummyUsers[0],
-    upvote: ["1"],
-    downvote: [],
-    vote: 1,
-    views: 10,
-    comment: [],
-    answer: [],
-    tags: ["react", "javascript"],
-  },
-  {
-    id: "be67d4c9-5519-4d35-9a1f-59297e9eec53 ads",
-    title: "How to solve this problem?",
-    content:
-      "I am facing this issue and I don't know how to solve it this is a very long content and I am testing it",
-    userSub: "1",
-    aiAnswer: "This is an AI answer",
-    createdAt: "2021-09-01",
-    updatedAt: "2021-09-01",
-    user: dummyUsers[0],
-    upvote: ["1"],
-    downvote: [],
-    vote: 1,
-    views: 1,
-    comment: [],
-    answer: [],
-    tags: ["react", "javascript", "typescript", "nextjs", "prisma", "graphql"],
-  },
-];
 
 const QuestionCard: React.FC<{ question: Question }> = ({ question }) => {
   return (
