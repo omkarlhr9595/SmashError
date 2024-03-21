@@ -110,12 +110,20 @@ const QuestionById = () => {
               <Skeleton className="h-24 w-12 bg-gray-300" />
             )}
           </div>
-          <Markdown
-            remarkPlugins={[remarkGfm]}
-            className="ml-4 overflow-auto text-sm"
-            children={data?.content}
-          />
+          <div className="">
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              className="ml-4 mt-4 overflow-auto text-sm"
+              children={data?.content}
+            />
+          </div>
         </div>
+        <h1 className="mt-5 text-2xl font-bold text-blue-700">Answer By AI</h1>
+        <Markdown
+          remarkPlugins={[remarkGfm]}
+          className=""
+          children={data?.aiAnswer}
+        />
       </div>
     </div>
   );

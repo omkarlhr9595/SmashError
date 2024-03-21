@@ -1,25 +1,56 @@
+import axios from "axios";
 import prisma from "../client";
-
+import config from "../config/config";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const ask = async (
   sub: string,
   title: string,
   body: string,
   tags: string[]
 ) => {
-  const question = await prisma.question.create({
-    data: {
-      aiAnswer: "This is an AI answer",
-      content: body,
-      title,
-      user: {
-        connect: {
-          sub,
-        },
+  console.log(config.geminiApiKey);
+
+  try {
+    const { data } = await axios.post(
+      `${config.geminiApiUri}`,
+      {
+        contents: [
+          {
+            parts: [
+              {
+                text: title + "\n" + body + "\n" + tags.join(","),
+              },
+            ],
+          },
+        ],
       },
-      tags,
-    },
-  });
-  return question;
+      {
+        headers: {
+          "x-api-key": config.geminiApiKey,
+        },
+      }
+    );
+
+    const text = data.candidates[0].content.parts[0].text;
+
+    const question = await prisma.question.create({
+      data: {
+        aiAnswer: text,
+        content: body,
+        title,
+        user: {
+          connect: {
+            sub,
+          },
+        },
+        tags,
+      },
+    });
+    return question;
+  } catch (error) {
+    console.log({ error });
+  }
 };
 
 const getQuestionById = async (id: string) => {
@@ -187,7 +218,6 @@ const voteQuestion = async (
       });
     }
   }
-
 };
 
 const addView = async (questionId: string) => {

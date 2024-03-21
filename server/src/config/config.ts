@@ -31,6 +31,8 @@ if (error) {
 export default {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  geminiApiKey: envVars.GEMINI_API_KEY,
+  geminiApiUri: envVars.GEMINI_API_URI,
   jwt: {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
