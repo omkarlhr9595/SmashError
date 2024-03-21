@@ -25,9 +25,20 @@ const addView = {
   }),
 };
 
+const addAnswer = {
+  params: Joi.object().keys({
+    questionId: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    sub: Joi.string().required(),
+    content: Joi.string().required(),
+  }),
+};
+
 export default {
   ask,
   getQuestionById,
   voteQuestion,
   addView,
+  addAnswer,
 };

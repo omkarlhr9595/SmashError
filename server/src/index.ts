@@ -3,15 +3,20 @@ import prisma from "./client";
 import app from "./app";
 import config from "./config/config";
 
-
 let server: Server;
 
-
-prisma.$connect().then(() => {
-  server = app.listen(config.port, () => {
-    console.log(`🟢 Server is running on http://localhost:${config.port}`);
+prisma
+  .$connect()
+  .then(() => {
+    server = app.listen(config.port, () => {
+      console.log(`🟢 Server is running on http://localhost:${config.port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("🔴 Unable to connect to the database");
+    console.error(error);
+    process.exit(1);
   });
-});
 
 const exitHandler = () => {
   if (server) {

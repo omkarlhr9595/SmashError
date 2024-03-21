@@ -49,12 +49,12 @@ const AskPage: React.FC = () => {
   const sub = user?.sub;
   const access_token = token?.access_token;
 
-  const { mutate, error, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: ask,
     onSuccess: (data) => {
       navigate(`/question/${data.data.id}`);
     },
-    onError: (error) => {
+    onError: () => {
       toast("Error occurred while asking question.");
     },
   });

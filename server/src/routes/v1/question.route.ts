@@ -34,4 +34,11 @@ router.post(
   questionController.addView
 );
 
+router.post(
+  "/:questionId/answer",
+  validate(questionValidation.addAnswer),
+  authCheck,
+  questionController.addAnswer
+);
+
 export default router;

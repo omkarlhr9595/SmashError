@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Filter, getAllQuestions } from "../api/questions.api";
-import { Skeleton } from "@/components/ui/skeleton";
 import { QuestionCardSkeleton } from "@/components/skeleton/questionCard.skeleton";
 const HomePage: React.FC = () => {
   const [question, setQuestion] = React.useState<Question[]>([]);
@@ -27,7 +26,6 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     if (data) {
       setQuestion(data);
-      console.log(data);
     }
   }, [data]);
 

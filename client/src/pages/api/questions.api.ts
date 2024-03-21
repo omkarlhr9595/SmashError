@@ -29,7 +29,6 @@ const ask = async (data: AskQuestion) => {
 
 const getQuestionById = async (id: string) => {
   const response = await axios.get(`${BASE_URL}/v1/questions/${id}`);
-  console.log(response.data.data);
 
   if (response.data.data === null) throw new Error("Question not found");
 
@@ -71,9 +70,44 @@ const voteQuestion = async (
       },
     },
   );
-  console.log(response.data);
 
   return response.data.data;
 };
 
-export { ask, getQuestionById, getAllQuestions, Filter, voteQuestion };
+const addView = async (questionId: string) => {
+  const response = await axios.post(
+    `${BASE_URL}/v1/questions/${questionId}/views`,
+  );
+  return response.data.data;
+};
+
+const addAnswer = async (
+  questionId: string,
+  sub: string,
+  content: string,
+  access_token: string,
+) => {
+  const response = await axios.post(
+    `${BASE_URL}/v1/questions/${questionId}/answer`,
+    {
+      sub,
+      content,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    },
+  );
+  return response.data.data;
+};
+
+export {
+  ask,
+  getQuestionById,
+  getAllQuestions,
+  Filter,
+  voteQuestion,
+  addView,
+  addAnswer,
+};

@@ -43,10 +43,19 @@ export const addView = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+export const addAnswer = catchAsync(async (req, res) => {
+  const { questionId } = req.params;
+  const { sub, content } = req.body;
+
+  const answer = await questionsService.addAnswer(questionId, sub, content);
+  res.status(httpStatus.CREATED).json({ data: answer });
+});
+
 export default {
   ask,
   getQuestionById,
   getAllQuestions,
   voteQuestion,
   addView,
+  addAnswer,
 };

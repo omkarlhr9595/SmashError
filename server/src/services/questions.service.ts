@@ -9,7 +9,15 @@ const ask = async (
   body: string,
   tags: string[]
 ) => {
-  console.log(config.geminiApiKey);
+  const userExists = await prisma.user.findUnique({
+    where: {
+      sub,
+    },
+  });
+
+  if (!userExists) {
+    throw new Error("User not found");
+  }
 
   try {
     const { data } = await axios.post(
@@ -32,11 +40,13 @@ const ask = async (
       }
     );
 
-    const text = data.candidates[0].content.parts[0].text;
+    const aiAnswer =
+      data.candidates[0]?.content?.parts[0]?.text ??
+      "We are sorry, we could not generate an answer for you by AI at the moment. Please try again later.";
 
     const question = await prisma.question.create({
       data: {
-        aiAnswer: text,
+        aiAnswer,
         content: body,
         title,
         user: {
@@ -61,7 +71,6 @@ const getQuestionById = async (id: string) => {
     include: {
       user: true,
       answer: true,
-      comment: true,
     },
   });
 
@@ -73,7 +82,6 @@ const getAllQuestionsByHighestVotes = async () => {
     include: {
       user: true, // Include the User relation
       answer: true, // Include the Answer relation
-      comment: true, // Include the comment relation
     },
   });
 
@@ -99,7 +107,6 @@ const getAllQuestionsByNewest = async () => {
     include: {
       user: true, // Include the User relation
       answer: true, // Include the Answer relation
-      comment: true, // Include the comment relation
     },
   });
 
@@ -116,7 +123,6 @@ const getAllQuestionsThisWeek = async () => {
     include: {
       user: true, // Include the User relation
       answer: true, // Include the Answer relation
-      comment: true, // Include the comment relation
     },
   });
 
@@ -128,7 +134,6 @@ const getAllQuestions = async () => {
     include: {
       user: true, // Include the User relation
       answer: true, // Include the Answer relation
-      comment: true, // Include the comment relation
     },
   });
 
@@ -243,6 +248,45 @@ const addView = async (questionId: string) => {
   });
 };
 
+const addAnswer = async (questionId: string, sub: string, content: string) => {
+  const userExists = await prisma.user.findUnique({
+    where: {
+      sub,
+    },
+  });
+  if (!userExists) {
+    throw new Error("User not found");
+  }
+
+  const questionExists = await prisma.question.findUnique({
+    where: {
+      id: questionId,
+    },
+  });
+
+  if (!questionExists) {
+    throw new Error("Question not found");
+  }
+
+  const answer = await prisma.answer.create({
+    data: {
+      content,
+      question: {
+        connect: {
+          id: questionId,
+        },
+      },
+      user: {
+        connect: {
+          sub,
+        },
+      },
+    },
+  });
+
+  return answer;
+};
+
 export default {
   ask,
   getQuestionById,
@@ -252,4 +296,5 @@ export default {
   getAllQuestions,
   voteQuestion,
   addView,
+  addAnswer,
 };
