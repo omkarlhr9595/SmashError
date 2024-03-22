@@ -35,10 +35,17 @@ const addAnswer = {
   }),
 };
 
+const getAnswersByQuestionId = {
+  params: Joi.object().keys({
+    questionId: Joi.string().required(),
+  }),
+};
+
 export default {
   ask,
   getQuestionById,
   voteQuestion,
   addView,
   addAnswer,
+  getAnswersByQuestionId,
 };

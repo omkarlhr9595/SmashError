@@ -41,4 +41,10 @@ router.post(
   questionController.addAnswer
 );
 
+router.get(
+  "/:questionId/answers",
+  validate(questionValidation.getAnswersByQuestionId),
+  questionController.getAnswersByQuestionId
+);
+
 export default router;

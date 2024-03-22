@@ -37,18 +37,24 @@ const voteQuestion = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-export const addView = catchAsync(async (req, res) => {
+const addView = catchAsync(async (req, res) => {
   const { questionId } = req.params;
   await questionsService.addView(questionId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-export const addAnswer = catchAsync(async (req, res) => {
+const addAnswer = catchAsync(async (req, res) => {
   const { questionId } = req.params;
   const { sub, content } = req.body;
 
   const answer = await questionsService.addAnswer(questionId, sub, content);
   res.status(httpStatus.CREATED).json({ data: answer });
+});
+
+const getAnswersByQuestionId = catchAsync(async (req, res) => {
+  const { questionId } = req.params;
+  const answers = await questionsService.getAnswersByQuestionId(questionId);
+  res.status(httpStatus.OK).json({ data: answers });
 });
 
 export default {
@@ -58,4 +64,5 @@ export default {
   voteQuestion,
   addView,
   addAnswer,
+  getAnswersByQuestionId,
 };

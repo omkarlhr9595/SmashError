@@ -287,6 +287,19 @@ const addAnswer = async (questionId: string, sub: string, content: string) => {
   return answer;
 };
 
+const getAnswersByQuestionId = async (questionId: string) => {
+  const answers = await prisma.answer.findMany({
+    where: {
+      questionId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  return answers;
+};
+
 export default {
   ask,
   getQuestionById,
@@ -297,4 +310,5 @@ export default {
   voteQuestion,
   addView,
   addAnswer,
+  getAnswersByQuestionId,
 };

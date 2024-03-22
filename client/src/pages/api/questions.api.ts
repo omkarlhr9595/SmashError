@@ -102,6 +102,13 @@ const addAnswer = async (
   return response.data.data;
 };
 
+const getAnswersByQuestionId = async (questionId: string) => {
+  const response = await axios.get(
+    `${BASE_URL}/v1/questions/${questionId}/answers`,
+  );
+  return response.data.data;
+};
+
 export {
   ask,
   getQuestionById,
@@ -110,4 +117,5 @@ export {
   voteQuestion,
   addView,
   addAnswer,
+  getAnswersByQuestionId,
 };
