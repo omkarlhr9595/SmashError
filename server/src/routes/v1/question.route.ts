@@ -47,4 +47,11 @@ router.get(
   questionController.getAnswersByQuestionId
 );
 
+router.post(
+  "/answer/vote",
+  validate(questionValidation.voteAnswer),
+  authCheck,
+  questionController.voteAnswer
+);
+
 export default router;

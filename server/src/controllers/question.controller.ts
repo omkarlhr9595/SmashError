@@ -57,6 +57,12 @@ const getAnswersByQuestionId = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ data: answers });
 });
 
+const voteAnswer = catchAsync(async (req, res) => {
+  const { answerId, userSub, vote } = req.body;
+  await questionsService.voteAnswer(answerId, userSub, vote);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 export default {
   ask,
   getQuestionById,
@@ -65,4 +71,5 @@ export default {
   addView,
   addAnswer,
   getAnswersByQuestionId,
+  voteAnswer,
 };

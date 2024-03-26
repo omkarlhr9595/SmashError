@@ -297,7 +297,99 @@ const getAnswersByQuestionId = async (questionId: string) => {
     },
   });
 
+  answers.sort(
+    (a, b) =>
+      b.upvote.length -
+      b.downvote.length -
+      (a.upvote.length - a.downvote.length)
+  );
+
   return answers;
+};
+
+const voteAnswer = async (
+  answerId: string,
+  userSub: string,
+  vote: "upvote" | "downvote"
+) => {
+  const answer = await prisma.answer.findUnique({
+    where: {
+      id: answerId,
+    },
+  });
+
+  if (!answer) {
+    throw new Error("Answer not found");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      sub: userSub,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const isUpvoted = answer.upvote.find((u) => u === userSub);
+  const isDownvoted = answer.downvote.find((u) => u === userSub);
+
+  if (vote === "upvote") {
+    if (isUpvoted) {
+      await prisma.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          upvote: {
+            set: answer.upvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    } else {
+      await prisma.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          upvote: {
+            push: userSub,
+          },
+          downvote: {
+            set: answer.downvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    }
+  } else {
+    if (isDownvoted) {
+      await prisma.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          downvote: {
+            set: answer.downvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    } else {
+      await prisma.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          downvote: {
+            push: userSub,
+          },
+          upvote: {
+            set: answer.upvote.filter((u) => u !== userSub),
+          },
+        },
+      });
+    }
+  }
 };
 
 export default {
@@ -311,4 +403,5 @@ export default {
   addView,
   addAnswer,
   getAnswersByQuestionId,
+  voteAnswer,
 };

@@ -109,6 +109,29 @@ const getAnswersByQuestionId = async (questionId: string) => {
   return response.data.data;
 };
 
+const voteAnswer = async (
+  answerId: string,
+  vote: "upvote" | "downvote",
+  userSub: string,
+  access_token: string,
+) => {
+  const response = await axios.post(
+    `${BASE_URL}/v1/questions/answer/vote`,
+    {
+      answerId,
+      vote,
+      userSub,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    },
+  );
+
+  return response.data.data;
+};
+
 export {
   ask,
   getQuestionById,
@@ -118,4 +141,5 @@ export {
   addView,
   addAnswer,
   getAnswersByQuestionId,
+  voteAnswer,
 };

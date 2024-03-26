@@ -41,6 +41,14 @@ const getAnswersByQuestionId = {
   }),
 };
 
+const voteAnswer = {
+  body: Joi.object().keys({
+    answerId: Joi.string().required(),
+    userSub: Joi.string().required(),
+    vote: Joi.string().valid("upvote", "downvote").required(),
+  }),
+};
+
 export default {
   ask,
   getQuestionById,
@@ -48,4 +56,5 @@ export default {
   addView,
   addAnswer,
   getAnswersByQuestionId,
+  voteAnswer,
 };
